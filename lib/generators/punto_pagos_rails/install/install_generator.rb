@@ -7,6 +7,13 @@ class PuntoPagosRails::InstallGenerator < Rails::Generators::NamedBase
     models.include?(name.classify) ? add_amount_attribute_to_resources : create_resource
   end
 
+  def extend_resource_abilities
+    line = "class #{name.classify} < ActiveRecord::Base"
+    gsub_file "app/models/#{name}.rb", /(#{Regexp.escape(line)})/mi do |match|
+      "#{match}\n  include PuntoPagosRails::ResourceExtension\n"
+    end
+  end
+
   def copy_migrations
     rake "railties:install:migrations"
   end

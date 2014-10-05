@@ -1,4 +1,5 @@
 require "punto_pagos_rails/engine"
+require "punto_pagos_rails/resource_extension"
 
 module PuntoPagosRails
   mattr_accessor :resource_class
