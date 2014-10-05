@@ -14,7 +14,7 @@ class PuntoPagosRails::InstallGenerator < Rails::Generators::NamedBase
   end
 
   def copy_migrations
-    puts 'TODO: copy_migrations'
+    rake "railties:install:migrations"
   end
 
   def create_initializer
