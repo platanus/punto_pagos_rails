@@ -2,15 +2,9 @@ class PuntoPagosRails::InstallGenerator < Rails::Generators::NamedBase
   source_root File.expand_path('../templates', __FILE__)
 
   def create_resource_model
-    model_name = name.downcase.camelize.singularize
     Rails.application.eager_load!
     models = ActiveRecord::Base.descendants.map(&:to_s)
-
-    if models.include?(model_name)
-      add_amount_attribute_to_resources(model_name)
-    else
-      create_resource(model_name)
-    end
+    models.include?(name.classify) ? add_amount_attribute_to_resources : create_resource
   end
 
   def copy_migrations
@@ -18,17 +12,16 @@ class PuntoPagosRails::InstallGenerator < Rails::Generators::NamedBase
   end
 
   def create_initializer
-    puts 'TODO: create_initializer'
+    template "punto_pagos_rails.rb", "config/initializers/punto_pagos_rails.rb"
   end
 
   private
 
-    def add_amount_attribute_to_resources _model_name
-      table_name = _model_name.tableize
-      generate "migration add_amount_to_#{table_name} amount:integer"
+    def add_amount_attribute_to_resources
+      generate "migration add_amount_to_#{name.tableize} amount:integer"
     end
 
-    def create_resource _model_name
-      generate "model #{_model_name} amount:integer"
+    def create_resource
+      generate "model #{name.classify} amount:integer --no-fixture"
     end
 end

@@ -1,0 +1,1 @@
+PuntoPagosRails.resource_class = '<%= name.classify %>'
