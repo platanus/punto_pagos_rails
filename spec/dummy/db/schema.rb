@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140928003539) do
+ActiveRecord::Schema.define(version: 20141026172011) do
 
   create_table "punto_pagos_rails_transactions", force: true do |t|
     t.integer  "resource_id"
@@ -19,6 +19,12 @@ ActiveRecord::Schema.define(version: 20140928003539) do
     t.integer  "amount"
     t.string   "error"
     t.string   "state"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tickets", force: true do |t|
+    t.integer  "amount"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
