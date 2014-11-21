@@ -1,6 +1,6 @@
 module PuntoPagosRails
   class Transaction < ActiveRecord::Base
-    belongs_to :resource, class_name: PuntoPagosRails.resource_class
+    belongs_to :resource, class_name: PuntoPagosRails.resource_class_name
 
     delegate :amount, :to => :resource
 

@@ -1,9 +1,9 @@
-module PuntosPagosRails
+module PuntoPagosRails
   class TransactionService < Struct.new(:resource_id)
     attr_accessor :process_url
 
     def create
-      transaction = resource.transactions.create
+      transaction = resource.transactions.create!
 
       request = PuntoPagos::Request.new
       response = request.create(transaction.id.to_s, transaction.amount_to_s, nil)
@@ -19,7 +19,7 @@ module PuntosPagosRails
     end
 
     def error
-      
+      resource.errors.messages[:base].first
     end
 
     private
@@ -35,7 +35,7 @@ module PuntosPagosRails
         return false
       end
 
-      transaction.update(token: token, amount: resource.amount)
+      transaction.update!(token: token, amount: resource.amount)
     end
 
     def token_repeated?(token)
@@ -43,7 +43,7 @@ module PuntosPagosRails
     end
 
     def resource
-      @resource ||= PuntosPagosRails.resource_class.find(resource_id)
+      @resource ||= PuntoPagosRails.resource_class.find(resource_id)
     end
   end
 end
