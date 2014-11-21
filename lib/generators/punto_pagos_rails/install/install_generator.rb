@@ -22,10 +22,6 @@ class PuntoPagosRails::InstallGenerator < Rails::Generators::NamedBase
     template "punto_pagos_rails.rb", "config/initializers/punto_pagos_rails.rb"
   end
 
-  def create_config_file
-    template "puntopagos.yml", "config/puntopagos.yml"
-  end
-
   private
 
     def add_amount_attribute_to_resources
