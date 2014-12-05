@@ -26,12 +26,12 @@ module PuntoPagosRails
 
     def init_transaction(transaction, token)
       if token.blank?
-        appointment.errors.add :base, :invalid_returned_puntopagos_token
+        resource.errors.add :base, :invalid_returned_puntopagos_token
         return false
       end
 
       if token_repeated?(token)
-        appointment.errors.add :base, :repeated_token_given
+        resource.errors.add :base, :repeated_token_given
         return false
       end
 
