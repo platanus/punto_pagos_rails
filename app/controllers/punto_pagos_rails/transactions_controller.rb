@@ -10,6 +10,17 @@ module PuntoPagosRails
       end
     end
 
+    def notification
+      response = TransactionService.notificate(params, request.headers)
+      render json: response
+    end
+
+    def success
+    end
+
+    def error
+    end
+
     private
 
     def render_payment_error_view(error_key = nil)

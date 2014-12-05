@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", "~> 4.1.6"
   s.add_dependency "puntopagos", "0.2.3"
   s.add_dependency "enumerize", "0.8.0"
-  s.add_dependency "state_machine", "1.2.0"
+  s.add_dependency "aasm", "~> 4.0.4"
 
   s.add_development_dependency "rspec-rails", "3.0.1"
   s.add_development_dependency "pry-rails", "0.3.2"

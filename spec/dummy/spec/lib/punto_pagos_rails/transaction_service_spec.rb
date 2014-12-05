@@ -1,12 +1,17 @@
 require 'rails_helper'
 
-RSpec.describe PuntoPagosRails::TransactionService do
+include PuntoPagosRails
+
+RSpec.describe TransactionService do
+
   let(:ticket) { Ticket.create amount: 22 }
-  let(:service) { PuntoPagosRails::TransactionService.new(ticket.id) }
+  let(:service) { TransactionService.new(ticket.id) }
   let(:request) { double }
   let(:response) { double }
   let(:token) { 'XXXXX' }
   let(:payment_process_url) { double }
+  let(:notification) { double }
+  let(:transaction) { Transaction.create }
 
   before do
     allow(PuntoPagos::Request).to receive(:new).and_return(request)
@@ -53,7 +58,7 @@ RSpec.describe PuntoPagosRails::TransactionService do
         end
 
         it "fails with repeated token" do
-          PuntoPagosRails::Transaction.create(token: 'REPEATED_TOKEN')
+          Transaction.create(token: 'REPEATED_TOKEN')
           allow(response).to receive(:get_token).and_return('REPEATED_TOKEN')
           expect(service.create).to eq(false)
         end
@@ -75,6 +80,61 @@ RSpec.describe PuntoPagosRails::TransactionService do
           I18n.t("activerecord.errors.models.ticket.attributes.base.invalid_puntopagos_response"))
       end
 
+    end
+  end
+
+  describe "#notificate" do
+
+    before do
+      allow(PuntoPagos::Notification).to receive(:new).and_return(notification)
+      allow(notification).to receive(:valid?).with({}, {}).and_return(true)
+      allow(PuntoPagosRails::Transaction).to receive(:find_by_token).and_return(transaction)
+    end
+
+    it "creates a notification" do
+      TransactionService.notificate({}, {})
+      expect(PuntoPagos::Notification).to have_received(:new)
+    end
+
+    context "when the notification is valid" do
+
+      it "the notification is completed" do
+        TransactionService.notificate({}, {})
+        expect(transaction.reload.state).to eq('completed')
+      end
+    end
+
+    context "when the notification is invalid" do
+      before do
+        allow(notification).to receive(:valid?).with({}, {}).and_return(false)
+      end
+
+      it "the notification is rejected" do
+        TransactionService.notificate({}, {})
+        expect(transaction.reload.state).to eq('rejected')
+      end
+    end
+
+    context "when the notification is completed" do
+      before do
+        transaction.update_column :state, 'completed'
+      end
+
+      it "should not be rejectable" do
+        TransactionService.notificate({}, {})
+        expect(transaction.reload.state).to_not eq('rejected')
+      end
+    end
+
+    context "when the notification is rejected" do
+      before do
+        transaction.update_column :state, 'rejected'
+      end
+
+      it "should not be completable" do
+        TransactionService.notificate({}, {})
+        expect(transaction.reload.state).to_not eq('completed')
+      end
     end
   end
 end
