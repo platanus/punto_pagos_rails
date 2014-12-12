@@ -1,1 +1,2 @@
-<h3><%= error_key %></h3>
+<h3><%= error_message %></h3>
+<p><%= t('punto_pagos_rails.error.detail', id: @resource.id, amount: @resource.amount, resource: @resource.class.name.downcase) %></p>

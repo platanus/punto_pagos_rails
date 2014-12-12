@@ -1,1 +1,2 @@
-<h3><%= t('punto_pagos_rails.success') %></h3>
+<h3><%= t('punto_pagos_rails.success.title') %></h3>
+<p><%= t('punto_pagos_rails.success.detail', id: @resource.id, amount: @resource.amount, resource: @resource.class.name.downcase) %></p>

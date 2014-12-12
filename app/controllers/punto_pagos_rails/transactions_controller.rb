@@ -27,8 +27,8 @@ module PuntoPagosRails
 
     private
 
-    def render_payment_error_view
-      render error_template, locals: { error_key: error_key }
+    def render_payment_error_view(error_message)
+      render error_template, locals: { error_message: error_message }
     end
 
     def error_template
