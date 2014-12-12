@@ -1,0 +1,8 @@
+en:
+  punto_pagos_rails:
+    success: Transaction successfully completed
+    errors:
+      invalid_puntopagos_response: Invalid PuntoPagos response
+      invalid_returned_puntopagos_token: Invalid returned PuntoPagos token
+      repeated_token_given: PuntoPagos token already taken
+      invalid_puntopagos_payment: The payment was rejected by PuntoPagos

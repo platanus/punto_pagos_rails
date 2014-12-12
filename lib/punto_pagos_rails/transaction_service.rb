@@ -46,28 +46,6 @@ module PuntoPagosRails
         transaction
       end
 
-      # def self.complete_transaction(token)
-      #   transaction = processing_transaction(token)
-      #   return false unless transaction
-      #   app = transaction.appointment
-      #   return false unless app.can_pay?
-      #   ActiveRecord::Base.transaction do
-      #     transaction.complete
-      #     app.pay
-      #   end
-      # end
-
-      # def self.reject_transaction(token, error)
-      #   transaction = processing_transaction(token)
-      #   return false unless transaction
-      #   app = transaction.appointment
-      #   return false unless app.can_reject_payment?
-      #   ActiveRecord::Base.transaction do
-      #     transaction.reject(error)
-      #     app.reject_payment
-      #   end
-      # end
-
       def self.respond_success(token)
         transaction = processing_transaction(token)
         return if transaction.nil?

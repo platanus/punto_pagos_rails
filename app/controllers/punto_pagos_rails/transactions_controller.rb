@@ -16,16 +16,18 @@ module PuntoPagosRails
     end
 
     def success
+      @resource = Transaction.find_by(token: params[:token]).resource
     end
 
     def error
+      @resource = Transaction.find_by(token: params[:token]).resource
+      translated_error = I18n.t("punto_pagos_rails.errors.invalid_puntopagos_payment")
+      render_payment_error_view translated_error
     end
 
     private
 
-    def render_payment_error_view(error_key = nil)
-      raise "Error message unspecified" if error_key.nil?
-
+    def render_payment_error_view
       render error_template, locals: { error_key: error_key }
     end
 
