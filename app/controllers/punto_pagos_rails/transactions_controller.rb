@@ -16,11 +16,11 @@ module PuntoPagosRails
     end
 
     def success
-      @resource = Transaction.find_by(token: params[:token]).resource
+      @resource = resource_by_token
     end
 
     def error
-      @resource = Transaction.find_by(token: params[:token]).resource
+      @resource = resource_by_token
       translated_error = I18n.t("punto_pagos_rails.errors.invalid_puntopagos_payment")
       render_payment_error_view translated_error
     end
@@ -40,6 +40,10 @@ module PuntoPagosRails
         params.require(:resource_id)
         params[:resource_id]
       end
+    end
+
+    def resource_by_token
+      Transaction.find_by(token: params[:token]).resource
     end
   end
 end

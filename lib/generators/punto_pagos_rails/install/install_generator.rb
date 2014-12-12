@@ -22,6 +22,11 @@ class PuntoPagosRails::InstallGenerator < Rails::Generators::NamedBase
     template "punto_pagos_rails.rb", "config/initializers/punto_pagos_rails.rb"
   end
 
+  def copy_views
+    copy_file "success.html.erb", "app/views/punto_pagos_rails/transactions/success.html.erb"
+    copy_file "error.html.erb", "app/views/punto_pagos_rails/transactions/error.html.erb"
+  end
+
   private
 
     def add_amount_attribute_to_resources
