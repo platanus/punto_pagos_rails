@@ -12,7 +12,7 @@ module PuntoPagosRails
       response = request.create(transaction.id.to_s, transaction.amount_to_s, nil)
 
       if !response.success?
-        resource.errors.add :base, :invalid_puntopagos_response
+        resource.errors.add :base, I18n.t("punto_pagos_rails.errors.invalid_puntopagos_response")
         return false
       end
 
@@ -64,12 +64,12 @@ module PuntoPagosRails
 
     def init_transaction(transaction, token)
       if token.blank?
-        resource.errors.add :base, :invalid_returned_puntopagos_token
+        resource.errors.add :base, I18n.t("punto_pagos_rails.errors.invalid_returned_puntopagos_token")
         return false
       end
 
       if token_repeated?(token)
-        resource.errors.add :base, :repeated_token_given
+        resource.errors.add :base, I18n.t("punto_pagos_rails.errors.repeated_token_given")
         return false
       end
 
