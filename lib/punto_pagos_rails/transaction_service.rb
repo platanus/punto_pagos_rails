@@ -37,30 +37,30 @@ module PuntoPagosRails
       resource.errors.messages[:base].first
     end
 
-    private
+  private
 
-      def self.processing_transaction(token)
-        transaction = Transaction.find_by_token(token)
-        return unless transaction
-        return unless transaction.pending?
-        transaction
-      end
+    def self.processing_transaction(token)
+      transaction = Transaction.find_by_token(token)
+      return unless transaction
+      return unless transaction.pending?
+      transaction
+    end
 
-      def self.respond_success(token)
-        transaction = processing_transaction(token)
-        return if transaction.nil?
-        transaction.complete
-        transaction.save
-        { respuesta: SUCCESS_CODE, token: token }
-      end
+    def self.respond_success(token)
+      transaction = processing_transaction(token)
+      return if transaction.nil?
+      transaction.complete
+      transaction.save
+      { respuesta: SUCCESS_CODE, token: token }
+    end
 
-      def self.respond_error(token, error)
-        transaction = processing_transaction(token)
-        return if transaction.nil?
-        transaction.reject_with(error)
-        transaction.save
-        { respuesta: ERROR_CODE, error: error, token: token }
-      end
+    def self.respond_error(token, error)
+      transaction = processing_transaction(token)
+      return if transaction.nil?
+      transaction.reject_with(error)
+      transaction.save
+      { respuesta: ERROR_CODE, error: error, token: token }
+    end
 
     def init_transaction(transaction, token)
       if token.blank?
