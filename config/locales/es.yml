@@ -6,7 +6,7 @@ es:
     error:
       detail: "El pago del %{resource} #%{id} por el valor de $%{amount} fue rechazado"
     errors:
-      invalid_puntopagos_response: Respuesta inválida de PuntoPagos
+      invalid_puntopagos_response: No se pudo establecer comunicación con PuntoPagos
       invalid_returned_puntopagos_token: Token inválido de PuntoPagos
-      repeated_token_given: Token de PuntoPagos ya ha sido usado
+      repeated_token_given: El Token que identifica una transacción con PuntoPagos ya ha sido utilizado anteriormente.
       invalid_puntopagos_payment: El pago fue rechazado por PuntoPagos
