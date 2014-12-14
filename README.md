@@ -1,24 +1,14 @@
 # PuntoPagosRails
 
-Esta gema es un engine construído sobre [puntopagos-ruby](https://github.com/acidlabs/puntopagos-ruby) con la intención de itegrar a una aplicación Rails el flujo de pago básico o más común que podemos encontrar normalmente en una aplicación.
+Esta gema es un engine construído sobre [puntopagos-ruby](https://github.com/acidlabs/puntopagos-ruby) con la intención de integrar a una Rails app el flujo de pago básico o más común que podemos encontrar normalmente en una aplicación.
 
 ## Instalación
 
 Agrega a tu `Gemfile`
 
 ```ruby
-gem 'punto_pagos_rails'
+gem 'punto_pagos_rails', :git => 'git@github.com:platanus/punto_pagos_rails.git'
 ```
-
-Agregar al `.rbenv-vars` las siguientes variables que contienen las credenciales para conectarse con PuntoPagos:
-
-```
-PUNTO_PAGOS_KEY=XXX
-PUNTO_PAGOS_SECRET=XXX
-PUNTO_PAGOS_ENV=sandbox
-```
-
-El environment puede ser **sandbox** o **production**
 
 Luego, se debe correr el generador
 
@@ -41,9 +31,11 @@ El instalador hace lo siguiente:
 
 4. Crea un initializer para nuestra gema en: `/your_app/config/initializers/punto_pagos_rails.rb` con la configuración básica para funcionar.
 
-5. Copia la vista de "pago exitoso" en: `app/views/punto_pagos_rails/transactions/success.html.erb`. Esta es la vista donde nos redirigirá PuntoPagos cuando una trasacción se complete sin errores. La idea es modificar el estilo de esta view para que se adapte al de nuestra aplicación. Aquí podremos acceder a la variable: `@resource` que contiene la instancia de lo que acabamos de pagar. Por ej: si nuestro modelo pagable es `Ticket`, `@resource` contendrá una instancia de `Ticket`.
+5. Crea `/your_app/config/puntopagos.yml`. Este archivo debe modificarse con las credenciales para la comunicación con PuntoPago.
 
-6. Copia la vista de "pago no exitoso" en: `app/views/punto_pagos_rails/transactions/error.html.erb`. Esta es la vista donde nos redirigirá PuntoPagos cuando falle una transacción. Del mismo modo que con la vista de `success.html`, se podrá acceder al `@resource` para dar más detalle al usuario de lo que está pasando.
+6. Copia la vista de "pago exitoso" en: `app/views/punto_pagos_rails/transactions/success.html.erb`. Esta es la vista donde nos redirigirá PuntoPagos cuando una trasacción se complete sin errores. La idea es modificar el estilo de esta view para que se adapte al de nuestra aplicación. Aquí podremos acceder a la variable: `@resource` que contiene la instancia de lo que acabamos de pagar. Por ej: si nuestro modelo pagable es `Ticket`, `@resource` contendrá una instancia de `Ticket`.
+
+7. Copia la vista de "pago no exitoso" en: `app/views/punto_pagos_rails/transactions/error.html.erb`. Esta es la vista donde nos redirigirá PuntoPagos cuando falle una transacción. Del mismo modo que con la vista de `success.html`, se podrá acceder al `@resource` para dar más detalle al usuario de lo que está pasando.
 
 Por útlimo:
 
