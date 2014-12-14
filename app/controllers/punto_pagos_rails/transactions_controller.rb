@@ -6,6 +6,7 @@ module PuntoPagosRails
       if srv.create
         redirect_to srv.process_url
       else
+        @resource = resource_by_id
         render_payment_error_view srv.error
       end
     end
@@ -28,11 +29,7 @@ module PuntoPagosRails
     private
 
     def render_payment_error_view(error_message)
-      render error_template, locals: { error_message: error_message }
-    end
-
-    def error_template
-      'error'
+      render 'error', locals: { error_message: error_message }
     end
 
     def resource_id
@@ -43,7 +40,11 @@ module PuntoPagosRails
     end
 
     def resource_by_token
-      Transaction.find_by(token: params[:token]).resource
+      Transaction.find_by(token: params[:token]).try(:resource)
+    end
+
+    def resource_by_id
+      PuntoPagosRails.resource_class.find_by(id: params[:resource_id])
     end
   end
 end
