@@ -1,8 +1,8 @@
 ENV["RAILS_ENV"] ||= 'test'
 
+require File.expand_path("../dummy/config/environment", __FILE__)
 require 'rspec/rails'
 require 'spec_helper'
-require File.expand_path("../dummy/config/environment", __FILE__)
 require 'factory_girl_rails'
 require 'shoulda-matchers'
 
