@@ -1,4 +1,4 @@
-# PuntoPagosRails
+# PuntoPagosRails [![Gem Version](https://badge.fury.io/rb/punto_pagos_rails.svg)](http://badge.fury.io/rb/punto_pagos_rails)
 
 Esta gema es un engine construído sobre [puntopagos-ruby](https://github.com/acidlabs/puntopagos-ruby) con la intención de integrar a una Rails app el flujo de pago básico o más común que podemos encontrar normalmente en una aplicación.
 
