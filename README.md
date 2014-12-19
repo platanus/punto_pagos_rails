@@ -7,7 +7,7 @@ Esta gema es un engine construído sobre [puntopagos-ruby](https://github.com/ac
 Agrega a tu `Gemfile`
 
 ```ruby
-gem 'punto_pagos_rails', :git => 'git@github.com:platanus/punto_pagos_rails.git'
+gem 'punto_pagos_rails'
 ```
 
 Luego, se debe correr el generador
