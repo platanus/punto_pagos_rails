@@ -3,14 +3,13 @@ PATH
   specs:
     punto_pagos_rails (0.0.1)
       aasm (~> 4.0.4)
-      enumerize (= 0.8.0)
       puntopagos (= 0.2.3)
       rails (~> 4.1.6)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    aasm (4.0.4)
+    aasm (4.0.5)
     actionmailer (4.1.6)
       actionpack (= 4.1.6)
       actionview (= 4.1.6)
@@ -43,8 +42,6 @@ GEM
       timers (~> 4.0.0)
     coderay (1.1.0)
     diff-lcs (1.2.5)
-    enumerize (0.8.0)
-      activesupport (>= 3.2)
     erubis (2.7.0)
     factory_girl (4.4.0)
       activesupport (>= 3.0.0)
@@ -107,7 +104,7 @@ GEM
     rb-fsevent (0.9.4)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
-    rdoc (4.1.2)
+    rdoc (4.2.0)
       json (~> 1.4)
     rest-client (1.6.8)
       mime-types (~> 1.16)
