@@ -77,7 +77,7 @@ RSpec.describe TransactionService do
         allow(Ticket).to receive(:find).with(ticket.id).and_return(ticket)
         service.create
         expect(ticket.errors[:base]).to include(
-          I18n.t("activerecord.errors.models.ticket.attributes.base.invalid_puntopagos_response"))
+          I18n.t("punto_pagos_rails.errors.invalid_puntopagos_response"))
       end
 
     end
