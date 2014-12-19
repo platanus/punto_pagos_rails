@@ -2,9 +2,9 @@ es:
   punto_pagos_rails:
     success:
       title: Transacción completada con éxito
-      detail: "El pago del %{resource} #%{id} por el valor de $%{amount} fue realizado"
+      detail: "El pago del %{resource} <b>#%{id}</b> por el valor de <b>$%{amount}</b> fue realizado"
     error:
-      detail: "El pago del %{resource} #%{id} por el valor de $%{amount} fue rechazado"
+      detail: "El pago del %{resource} <b>#%{id}</b> por el valor de <b>$%{amount}</b> no se realizó"
     errors:
       invalid_puntopagos_response: No se pudo establecer comunicación con PuntoPagos
       invalid_returned_puntopagos_token: Token inválido de PuntoPagos
