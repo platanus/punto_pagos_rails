@@ -83,6 +83,23 @@ Suponiendo que mi recurso pagable es: `Ticket` y tengo una instancia de este mod
 @ticket.paid? #para saber si el recurso se pagó exitosamente.
 ```
 
+## Callbacks
+
+El recurso pagable puede recibir dos callbacks, uno de éxito `on_payment_success` y otro de error `on_payment_error`.
+
+```ruby
+class Ticket < ActiveRecord::Base
+  on_payment_success do
+    # do something on success
+    self.confirm_reservation
+  end
+
+  on_payment_error do
+    puts "Payment has failed for Ticket Id: #{self.id}"
+  end
+end
+```
+
 ## Contributing
 
 1. Fork it
@@ -102,4 +119,3 @@ punto_pagos_rails is maintained by [platanus](http://platan.us).
 ## License
 
 Guides is © 2014 platanus, spa. It is free software and may be redistributed under the terms specified in the LICENSE file.
-

@@ -27,9 +27,13 @@ module PuntoPagosRails
       err = params[:error]
 
       if notification.valid?(headers, params)
-        respond_success(tken)
+        resource.run_callbacks(:payment_success) do
+          respond_success(tken)
+        end
       else
-        respond_error(tken, err)
+        resource.run_callbacks(:payment_error) do
+          respond_error(tken, err)
+        end
       end
     end
 

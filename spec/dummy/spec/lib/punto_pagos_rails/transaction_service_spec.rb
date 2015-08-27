@@ -96,6 +96,23 @@ RSpec.describe TransactionService do
       expect(PuntoPagos::Notification).to have_received(:new)
     end
 
+    context "using callbacks" do
+
+      before do
+        TransactionService.notificate({}, {})
+      end
+
+      context "success" do
+
+        it "runs callback after successful payment" do
+          expect(ticket.paid).to be_truthy
+        end
+
+      end
+
+    end
+
+
     context "when the notification is valid" do
 
       it "the notification is completed" do
