@@ -27,8 +27,10 @@ module PuntoPagosRails
       err = params[:error]
 
       if notification.valid?(headers, params)
+        PuntoPagosRails.resource_class.notify(@resource, :success)
         respond_success(tken)
       else
+        PuntoPagosRails.resource_class.notify(@resource, :error)
         respond_error(tken, err)
       end
     end
