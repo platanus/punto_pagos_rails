@@ -27,13 +27,9 @@ module PuntoPagosRails
       err = params[:error]
 
       if notification.valid?(headers, params)
-        resource.run_callbacks(:payment_success) do
-          respond_success(tken)
-        end
+        respond_success(tken)
       else
-        resource.run_callbacks(:payment_error) do
-          respond_error(tken, err)
-        end
+        respond_error(tken, err)
       end
     end
 
@@ -53,16 +49,20 @@ module PuntoPagosRails
     def self.respond_success(token)
       transaction = processing_transaction(token)
       return if transaction.nil?
-      transaction.complete
-      transaction.save
+      transaction.resource.run_callbacks :payment_success do
+        transaction.complete
+        transaction.save
+      end
       { respuesta: SUCCESS_CODE, token: token }
     end
 
     def self.respond_error(token, error)
       transaction = processing_transaction(token)
       return if transaction.nil?
-      transaction.reject_with(error)
-      transaction.save
+      transaction.resource.run_callbacks :payment_error do
+        transaction.reject_with(error)
+        transaction.save
+      end
       { respuesta: ERROR_CODE, error: error, token: token }
     end
 

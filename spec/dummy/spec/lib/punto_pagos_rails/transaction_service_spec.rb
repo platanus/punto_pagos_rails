@@ -11,7 +11,7 @@ RSpec.describe TransactionService do
   let(:token) { 'XXXXX' }
   let(:payment_process_url) { double }
   let(:notification) { double }
-  let(:transaction) { Transaction.create }
+  let(:transaction) { PuntoPagosRails::Transaction.create(resource: ticket) }
 
   before do
     allow(PuntoPagos::Request).to receive(:new).and_return(request)
@@ -96,24 +96,12 @@ RSpec.describe TransactionService do
       expect(PuntoPagos::Notification).to have_received(:new)
     end
 
-    context "using callbacks" do
-
-      before do
-        TransactionService.notificate({}, {})
-      end
-
-      context "success" do
-
-        it "runs callback after successful payment" do
-          expect(ticket.paid).to be_truthy
-        end
-
-      end
-
-    end
-
-
     context "when the notification is valid" do
+
+      it "runs callback after successful payment" do
+        TransactionService.notificate({}, {})
+        expect(ticket.message).to eq("successful payment! #{ticket.id}")
+      end
 
       it "the notification is completed" do
         TransactionService.notificate({}, {})
@@ -124,11 +112,15 @@ RSpec.describe TransactionService do
     context "when the notification is invalid" do
       before do
         allow(notification).to receive(:valid?).with({}, {}).and_return(false)
+        TransactionService.notificate({}, {})
       end
 
       it "the notification is rejected" do
-        TransactionService.notificate({}, {})
         expect(transaction.reload.state).to eq('rejected')
+      end
+
+      it "calls error callbacks" do
+        expect(ticket.message).to eq("error paying ticket #{ticket.id}")
       end
     end
 
