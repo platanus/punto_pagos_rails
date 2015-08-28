@@ -85,18 +85,19 @@ Suponiendo que mi recurso pagable es: `Ticket` y tengo una instancia de este mod
 
 ## Callbacks
 
-El recurso pagable puede recibir dos callbacks, uno de éxito `on_payment_success` y otro de error `on_payment_error`.
+El recurso pagable puede recibir dos callbacks, uno de éxito `payment_success` y otro de error `payment_error` using `set_callback` to hook.
 
 ```ruby
 class Ticket < ActiveRecord::Base
-  on_payment_success do
+  set_callback :payment_success, :after do
     # do something on success
     self.confirm_reservation
   end
 
-  on_payment_error do
+  set_callback :payment_error, :after do
     puts "Payment has failed for Ticket Id: #{self.id}"
   end
+
 end
 ```
 
@@ -118,4 +119,4 @@ punto_pagos_rails is maintained by [platanus](http://platan.us).
 
 ## License
 
-Guides is © 2014 platanus, spa. It is free software and may be redistributed under the terms specified in the LICENSE file.
+PuntoPagosRails is © 2015 platanus, spa. It is free software and may be redistributed under the terms specified in the LICENSE file.
