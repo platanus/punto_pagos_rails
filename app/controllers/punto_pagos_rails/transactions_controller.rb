@@ -8,7 +8,7 @@ module PuntoPagosRails
       else
         @resource = resource_by_id
         if error_url = PuntoPagosRails.error_url
-          url = instance_exec(@resource.id, &error_url)
+          url = instance_exec(@resource, &error_url)
           redirect_to url
         else
           render_payment_error_view srv.error
@@ -24,7 +24,7 @@ module PuntoPagosRails
     def success
       @resource = resource_by_token
       if success_url_block = PuntoPagosRails.success_url
-        url = instance_exec(@resource.id, &success_url_block)
+        url = instance_exec(@resource, &success_url_block)
         redirect_to url
       end
     end
@@ -33,7 +33,7 @@ module PuntoPagosRails
       @resource = resource_by_token
       translated_error = I18n.t("punto_pagos_rails.errors.invalid_puntopagos_payment")
       if error_url = PuntoPagosRails.error_url
-        url = instance_exec(@resource.id, translated_error , &error_url)
+        url = instance_exec(@resource, translated_error , &error_url)
         redirect_to url
       else
         render_payment_error_view translated_error

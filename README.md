@@ -101,6 +101,16 @@ class Ticket < ActiveRecord::Base
 end
 ```
 
+## Redirects
+
+Por defecto se mostrarán las vistas de success y error copiadas durante la instalación. También se pueden definir redirects diferentes en el initializar `puntopagos.rb`
+
+```ruby
+config.success_url = Proc.new { |payable| main_app.your_route_url(payable) }
+config.error_url = Proc.new { |payable, error| main_app.your_route_url(payable, error: error) }
+```
+
+
 ## Contributing
 
 1. Fork it
