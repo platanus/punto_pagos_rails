@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20141026172011) do
 
   create_table "tickets", force: true do |t|
     t.integer  "amount"
+    t.string   "message"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

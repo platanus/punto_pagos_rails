@@ -21,6 +21,11 @@ module PuntoPagosRails
       render json: response
     end
 
+    def notification_no_ssl
+      response = TransactionService.validate(params[:token], transaction)
+      head 200
+    end
+
     def success
       @resource = resource_by_token
       if success_url_block = PuntoPagosRails.success_url
@@ -53,8 +58,12 @@ module PuntoPagosRails
       end
     end
 
+    def transaction
+      @transcation ||= Transaction.find_by(token: params[:token])
+    end
+
     def resource_by_token
-      Transaction.find_by(token: params[:token]).try(:resource)
+      transaction.try(:resource)
     end
 
     def resource_by_id
