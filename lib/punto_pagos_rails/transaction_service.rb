@@ -33,6 +33,16 @@ module PuntoPagosRails
       end
     end
 
+    def self.validate(token, transaction)
+      status = PuntoPagos::Status.new
+      status.check token, transaction.id.to_s, transaction.amount_to_s
+      if status.valid?
+        respond_success(token)
+      else
+        respond_error(token, status.error)
+      end
+    end
+
     def error
       resource.errors.messages[:base].first
     end

@@ -11,7 +11,8 @@ RSpec.describe TransactionService do
   let(:token) { 'XXXXX' }
   let(:payment_process_url) { double }
   let(:notification) { double }
-  let(:transaction) { PuntoPagosRails::Transaction.create(resource: ticket) }
+  let(:status) { double }
+  let(:transaction) { PuntoPagosRails::Transaction.create(resource: ticket, token: SecureRandom.base64) }
 
   before do
     allow(PuntoPagos::Request).to receive(:new).and_return(request)
@@ -81,6 +82,45 @@ RSpec.describe TransactionService do
       end
 
     end
+  end
+
+  describe "#validate" do
+
+    before do
+      allow(PuntoPagos::Status).to receive(:new).and_return(status)
+      allow(status).to receive(:check).with(transaction.token, transaction.id.to_s, transaction.amount_to_s)
+    end
+
+    it "creates a status object" do
+      allow(status).to receive(:valid?).and_return(true)
+      TransactionService.validate(transaction.token, transaction)
+      expect(PuntoPagos::Status).to have_received(:new)
+    end
+
+    context "when the token is valid" do
+
+      it "runs callback after successful payment" do
+        allow(status).to receive(:valid?).and_return(true)
+        TransactionService.validate(transaction.token, transaction)
+        ticket.reload
+        expect(ticket.message).to eq("successful payment! #{ticket.id}")
+      end
+
+    end
+
+    context "when the token is invalid" do
+
+      it "runs error callback" do
+        allow(status).to receive(:valid?).and_return(false)
+        allow(status).to receive(:error).and_return("Transaccion Incompleta")
+        TransactionService.validate(transaction.token, transaction)
+        ticket.reload
+        expect(ticket.message).to eq("error paying ticket #{ticket.id}")
+      end
+
+    end
+
+
   end
 
   describe "#notificate" do
