@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    punto_pagos_rails (0.1.1)
+    punto_pagos_rails (0.2.0)
       aasm (> 4.0.4)
       puntopagos (= 0.2.3)
       rails (> 4.1)
