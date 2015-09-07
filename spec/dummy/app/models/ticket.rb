@@ -10,13 +10,11 @@ class Ticket < ActiveRecord::Base
   end
 
   def confirm_payment
-    #puts "Dummy confirm"
     self.message = "successful payment! #{self.id}"
     save!
   end
 
   def release_tickets
-    #puts "Dummy release"
     self.message = "error paying ticket #{self.id}"
     save!
   end
