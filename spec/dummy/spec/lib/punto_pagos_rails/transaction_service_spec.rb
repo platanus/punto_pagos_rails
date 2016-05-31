@@ -1,9 +1,8 @@
-require 'rails_helper'
+require "rails_helper"
 
 include PuntoPagosRails
 
 RSpec.describe TransactionService do
-
   let(:ticket) { Ticket.create amount: 22 }
   let(:service) { TransactionService.new(ticket.id) }
   let(:request) { double }
@@ -12,7 +11,9 @@ RSpec.describe TransactionService do
   let(:payment_process_url) { double }
   let(:notification) { double }
   let(:status) { double }
-  let(:transaction) { PuntoPagosRails::Transaction.create(resource: ticket, token: SecureRandom.base64) }
+  let(:transaction) do
+    PuntoPagosRails::Transaction.create(resource: ticket, token: SecureRandom.base64)
+  end
 
   before do
     allow(PuntoPagos::Request).to receive(:new).and_return(request)
@@ -52,7 +53,6 @@ RSpec.describe TransactionService do
       end
 
       context "with unsuccesful initialization" do
-
         it "returns false with invalid token" do
           allow(response).to receive(:get_token).and_return(nil)
           expect(service.create).to eq(false)
@@ -63,13 +63,10 @@ RSpec.describe TransactionService do
           allow(response).to receive(:get_token).and_return('REPEATED_TOKEN')
           expect(service.create).to eq(false)
         end
-
       end
-
     end
 
     context "error" do
-
       it "returns false" do
         expect(service.create).to eq(false)
       end
@@ -80,15 +77,14 @@ RSpec.describe TransactionService do
         expect(ticket.errors[:base]).to include(
           I18n.t("punto_pagos_rails.errors.invalid_puntopagos_response"))
       end
-
     end
   end
 
   describe "#validate" do
-
     before do
       allow(PuntoPagos::Status).to receive(:new).and_return(status)
-      allow(status).to receive(:check).with(transaction.token, transaction.id.to_s, transaction.amount_to_s)
+      allow(status).to receive(:check).with(
+        transaction.token, transaction.id.to_s, transaction.amount_to_s)
     end
 
     it "creates a status object" do
@@ -98,14 +94,12 @@ RSpec.describe TransactionService do
     end
 
     context "when the token is valid" do
-
       it "runs callback after successful payment" do
         allow(status).to receive(:valid?).and_return(true)
         TransactionService.validate(transaction.token, transaction)
         ticket.reload
         expect(ticket.message).to eq("successful payment! #{ticket.id}")
       end
-
     end
 
     context "when the token is invalid" do
@@ -117,10 +111,7 @@ RSpec.describe TransactionService do
         ticket.reload
         expect(ticket.message).to eq("error paying ticket #{ticket.id}")
       end
-
     end
-
-
   end
 
   describe "#notificate" do
@@ -137,7 +128,6 @@ RSpec.describe TransactionService do
     end
 
     context "when the notification is valid" do
-
       it "runs callback after successful payment" do
         TransactionService.notificate({}, {})
         expect(ticket.message).to eq("successful payment! #{ticket.id}")

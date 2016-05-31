@@ -10,12 +10,12 @@ class Ticket < ActiveRecord::Base
   end
 
   def confirm_payment
-    self.message = "successful payment! #{self.id}"
+    self.message = "successful payment! #{id}"
     save!
   end
 
   def release_tickets
-    self.message = "error paying ticket #{self.id}"
+    self.message = "error paying ticket #{id}"
     save!
   end
 end

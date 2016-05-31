@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe Ticket, :type => :model do
+RSpec.describe Ticket, type: :model do
   describe "associations" do
     it { should have_many(:transactions) }
   end

@@ -47,8 +47,6 @@ module PuntoPagosRails
       resource.errors.messages[:base].first
     end
 
-  private
-
     def self.processing_transaction(token)
       transaction = Transaction.find_by_token(token)
       return unless transaction
@@ -76,9 +74,12 @@ module PuntoPagosRails
       { respuesta: ERROR_CODE, error: error, token: token }
     end
 
+    private
+
     def init_transaction(transaction, token)
       if token.blank?
-        resource.errors.add :base, I18n.t("punto_pagos_rails.errors.invalid_returned_puntopagos_token")
+        resource.errors.add(:base,
+          I18n.t("punto_pagos_rails.errors.invalid_returned_puntopagos_token"))
         return false
       end
 

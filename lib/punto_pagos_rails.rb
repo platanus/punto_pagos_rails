@@ -9,7 +9,6 @@ module PuntoPagosRails
   attr_accessor :success_url
   attr_accessor :error_url
 
-
   def resource_class
     resource_class_name.constantize
   end

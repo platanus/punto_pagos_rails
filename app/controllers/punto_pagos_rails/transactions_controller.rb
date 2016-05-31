@@ -22,7 +22,7 @@ module PuntoPagosRails
     end
 
     def notification_no_ssl
-      response = TransactionService.validate(params[:token], transaction)
+      TransactionService.validate(params[:token], transaction)
       head 200
     end
 
@@ -38,7 +38,7 @@ module PuntoPagosRails
       @resource = resource_by_token
       translated_error = I18n.t("punto_pagos_rails.errors.invalid_puntopagos_payment")
       if error_url = PuntoPagosRails.error_url
-        url = instance_exec(@resource, translated_error , &error_url)
+        url = instance_exec(@resource, translated_error, &error_url)
         redirect_to url
       else
         render_payment_error_view translated_error
