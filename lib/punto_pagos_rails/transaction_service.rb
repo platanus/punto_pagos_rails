@@ -1,9 +1,14 @@
 module PuntoPagosRails
-  class TransactionService < Struct.new(:resource_id)
+  class TransactionService
     attr_accessor :process_url
+    attr_reader :resource_id
 
     SUCCESS_CODE = "99"
     ERROR_CODE = "00"
+
+    def initialize(resource_id)
+      @resource_id = resource_id
+    end
 
     def create
       transaction = resource.transactions.create!
@@ -35,7 +40,8 @@ module PuntoPagosRails
 
     def self.validate(token, transaction)
       status = PuntoPagos::Status.new
-      status.check token, transaction.id.to_s, transaction.amount_to_s
+      status.check(token, transaction.id.to_s, transaction.amount_to_s)
+
       if status.valid?
         respond_success(token)
       else

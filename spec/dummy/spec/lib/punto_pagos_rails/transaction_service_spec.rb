@@ -103,7 +103,6 @@ RSpec.describe TransactionService do
     end
 
     context "when the token is invalid" do
-
       it "runs error callback" do
         allow(status).to receive(:valid?).and_return(false)
         allow(status).to receive(:error).and_return("Transaccion Incompleta")
@@ -115,7 +114,6 @@ RSpec.describe TransactionService do
   end
 
   describe "#notificate" do
-
     before do
       allow(PuntoPagos::Notification).to receive(:new).and_return(notification)
       allow(notification).to receive(:valid?).with({}, {}).and_return(true)
