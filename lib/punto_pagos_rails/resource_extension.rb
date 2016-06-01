@@ -18,7 +18,10 @@ module PuntoPagosRails
     end
 
     module ClassMethods
-      # TODO
+      def by_token(token)
+        transaction = Transaction.find_by(token: token)
+        transaction.try(:resource)
+      end
     end
   end
 end

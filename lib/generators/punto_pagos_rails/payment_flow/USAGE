@@ -1,0 +1,5 @@
+Description:
+ Add payment flow
+
+Example:
+  rails generate punto_pagos_rails:payment_flow ticket payments

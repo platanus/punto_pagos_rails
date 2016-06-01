@@ -5,11 +5,13 @@ require "punto_pagos_rails/transaction_service"
 module PuntoPagosRails
   extend self
 
-  attr_accessor :resource_class_name
-  attr_accessor :success_url
-  attr_accessor :error_url
+  attr_accessor :payable_resources
 
-  def resource_class
+  attr_accessor :resource_class_name # TODO: deprecate
+  attr_accessor :success_url # TODO: deprecate
+  attr_accessor :error_url # TODO: deprecate
+
+  def resource_class  # TODO: deprecate
     resource_class_name.constantize
   end
 
