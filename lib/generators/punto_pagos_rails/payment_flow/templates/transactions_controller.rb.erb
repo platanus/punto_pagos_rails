@@ -1,7 +1,7 @@
 class <%= controller_class %> < ApplicationController
   def create
-    @<%= payable %> = <%= payable_class %>.create!
-    srv = TransactionService.new(<%= payable %>.id)
+    @<%= payable %> = <%= payable_class %>.create!(create_params)
+    srv = PuntoPagosRails::TransactionService.new(@<%= payable %>)
 
     if srv.create
       redirect_to(srv.process_url)
@@ -11,7 +11,7 @@ class <%= controller_class %> < ApplicationController
   end
 
   def notification
-    @<%= payable %> = TransactionService.notificate(params, request.headers)
+    @<%= payable %> = PuntoPagosRails::TransactionService.notificate(params, request.headers)
     render(json: response)
   end
 
@@ -32,5 +32,9 @@ class <%= controller_class %> < ApplicationController
 
   def <%= payable %>_by_token
     @<%= payable %> ||= <%= payable_class %>.by_token(params[:token])
+  end
+
+  def create_params
+    params.require(:<%= payable %>).permit(:amount)
   end
 end

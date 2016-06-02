@@ -1,7 +1,7 @@
 class TransactionsController < ApplicationController
   def create
-    @ticket = Ticket.create!
-    srv = TransactionService.new(ticket.id)
+    @ticket = Ticket.create!(create_params)
+    srv = PuntoPagosRails::TransactionService.new(@ticket)
 
     if srv.create
       redirect_to(srv.process_url)
@@ -11,7 +11,7 @@ class TransactionsController < ApplicationController
   end
 
   def notification
-    @ticket = TransactionService.notificate(params, request.headers)
+    @ticket = PuntoPagosRails::TransactionService.notificate(params, request.headers)
     render(json: response)
   end
 
@@ -32,5 +32,9 @@ class TransactionsController < ApplicationController
 
   def ticket_by_token
     @ticket ||= Ticket.by_token(params[:token])
+  end
+
+  def create_params
+    params.require(:ticket).permit(:amount)
   end
 end
