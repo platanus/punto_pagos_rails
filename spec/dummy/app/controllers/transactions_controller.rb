@@ -27,7 +27,7 @@ class TransactionsController < ApplicationController
   private
 
   def render_payment_error_view(error_message)
-    render("error", locals: { error_message: error_message })
+    render(:error, locals: { error_message: error_message })
   end
 
   def ticket_by_token
