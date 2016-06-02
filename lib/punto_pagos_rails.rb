@@ -5,8 +5,6 @@ require "punto_pagos_rails/transaction_service"
 module PuntoPagosRails
   extend self
 
-  attr_accessor :payable_resources
-
   def setup
     yield self
     require "puntopagos"

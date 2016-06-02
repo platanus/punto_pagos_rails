@@ -16,7 +16,7 @@ module PuntoPagosRails
     module ClassMethods
       def by_token(token)
         transaction = Transaction.find_by(token: token)
-        transaction.try(:resource)
+        transaction.try(:payable)
       end
     end
   end

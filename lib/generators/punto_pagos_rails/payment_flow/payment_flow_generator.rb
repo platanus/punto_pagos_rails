@@ -22,15 +22,6 @@ class PuntoPagosRails::PaymentFlowGenerator < Rails::Generators::Base
     template("transactions_controller.rb.erb", controller_path)
   end
 
-  def add_payable_to_gem_initializer
-    line = /config.payable_resources = \[(.*?)\]/
-    gsub_file "config/initializers/punto_pagos_rails.rb", line do |match|
-      values = match.match(/\[(.*?)\]/)[1].split(",").map { |v| v.gsub(/[^a-z|_]/, '').to_sym }
-      values << payable.to_sym
-      "config.payable_resources = #{values.uniq}"
-    end
-  end
-
   def copy_views
     copy_file("success.html.erb", "app/views/#{controller_name}/success.html.erb")
     copy_file("error.html.erb", "app/views/#{controller_name}/error.html.erb")
