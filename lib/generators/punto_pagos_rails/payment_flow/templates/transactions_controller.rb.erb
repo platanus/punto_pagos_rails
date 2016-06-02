@@ -11,7 +11,7 @@ class <%= controller_class %> < ApplicationController
   end
 
   def notification
-    @<%= payable %> = PuntoPagosRails::TransactionService.notificate(params, request.headers)
+    response = PuntoPagosRails::TransactionService.notificate(params, request.headers)
     render(json: response)
   end
 

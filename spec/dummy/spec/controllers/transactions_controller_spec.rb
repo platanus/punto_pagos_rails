@@ -44,6 +44,18 @@ describe TransactionsController do
     end
   end
 
+  describe "#notification" do
+    before do
+      expect(PuntoPagosRails::TransactionService).to(
+        receive(:notificate).and_return(some: "json"))
+    end
+
+    it "renders json response" do
+      post :notification
+      expect(JSON.parse(response.body)).to eq("some" => "json")
+    end
+  end
+
   describe "#success" do
     let!(:transaction) { create(:transaction) }
 

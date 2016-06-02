@@ -11,7 +11,7 @@ class TransactionsController < ApplicationController
   end
 
   def notification
-    @ticket = PuntoPagosRails::TransactionService.notificate(params, request.headers)
+    response = PuntoPagosRails::TransactionService.notificate(params, request.headers)
     render(json: response)
   end
 
