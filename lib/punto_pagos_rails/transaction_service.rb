@@ -26,43 +26,8 @@ module PuntoPagosRails
       end
     end
 
-    def self.notificate(params, headers)
-      notification = PuntoPagos::Notification.new
-      tken = params[:token]
-      err = params[:error]
-
-      if notification.valid?(headers, params)
-        respond_success(tken)
-      else
-        respond_error(tken, err)
-      end
-    end
-
     def error
       payable.errors.messages[:base].first
-    end
-
-    def self.processing_transaction(token)
-      transaction = Transaction.find_by_token(token)
-      return unless transaction
-      return unless transaction.pending?
-      transaction
-    end
-
-    def self.respond_success(token)
-      transaction = processing_transaction(token)
-      return if transaction.nil?
-      transaction.complete
-      transaction.save
-      { respuesta: SUCCESS_CODE, token: token }
-    end
-
-    def self.respond_error(token, error)
-      transaction = processing_transaction(token)
-      return if transaction.nil?
-      transaction.reject_with(error)
-      transaction.save
-      { respuesta: ERROR_CODE, error: error, token: token }
     end
 
     private
@@ -74,7 +39,7 @@ module PuntoPagosRails
         return false
       end
 
-      if token_repeated?(token)
+      if repeated_token?(token)
         payable.errors.add :base, I18n.t("punto_pagos_rails.errors.repeated_token_given")
         return false
       end
@@ -82,8 +47,47 @@ module PuntoPagosRails
       transaction.update!(token: token, amount: payable.amount)
     end
 
-    def token_repeated?(token)
+    def repeated_token?(token)
       Transaction.where(token: token).any?
+    end
+
+    class << self
+      def notificate(params, headers)
+        notification = PuntoPagos::Notification.new
+        tken = params[:token]
+        err = params[:error]
+
+        if notification.valid?(headers, params)
+          respond_success(tken)
+        else
+          respond_error(tken, err)
+        end
+      end
+
+      private
+
+      def processing_transaction(token)
+        transaction = Transaction.find_by_token(token)
+        return unless transaction
+        return unless transaction.pending?
+        transaction
+      end
+
+      def respond_success(token)
+        transaction = processing_transaction(token)
+        return if transaction.nil?
+        transaction.complete
+        transaction.save
+        { respuesta: SUCCESS_CODE, token: token }
+      end
+
+      def respond_error(token, error)
+        transaction = processing_transaction(token)
+        return if transaction.nil?
+        transaction.reject_with(error)
+        transaction.save
+        { respuesta: ERROR_CODE, error: error, token: token }
+      end
     end
   end
 end
