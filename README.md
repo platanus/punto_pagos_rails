@@ -83,34 +83,6 @@ Suponiendo que mi recurso pagable es: `Ticket` y tengo una instancia de este mod
 @ticket.paid? #para saber si el recurso se pagó exitosamente.
 ```
 
-## Callbacks
-
-El recurso pagable puede recibir dos callbacks, uno de éxito `payment_success` y otro de error `payment_error` using `set_callback` to hook.
-
-```ruby
-class Ticket < ActiveRecord::Base
-  set_callback :payment_success, :after do
-    # do something on success
-    self.confirm_reservation
-  end
-
-  set_callback :payment_error, :after do
-    puts "Payment has failed for Ticket Id: #{self.id}"
-  end
-
-end
-```
-
-## Redirects
-
-Por defecto se mostrarán las vistas de success y error copiadas durante la instalación. También se pueden definir redirects diferentes en el initializar `puntopagos.rb`
-
-```ruby
-config.success_url = Proc.new { |payable| main_app.your_route_url(payable) }
-config.error_url = Proc.new { |payable, error| main_app.your_route_url(payable, error: error) }
-```
-
-
 ## Contributing
 
 1. Fork it

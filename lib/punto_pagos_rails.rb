@@ -8,8 +8,6 @@ module PuntoPagosRails
   attr_accessor :payable_resources
 
   attr_accessor :resource_class_name # TODO: deprecate
-  attr_accessor :success_url # TODO: deprecate
-  attr_accessor :error_url # TODO: deprecate
 
   def resource_class  # TODO: deprecate
     resource_class_name.constantize

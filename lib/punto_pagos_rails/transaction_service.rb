@@ -38,17 +38,6 @@ module PuntoPagosRails
       end
     end
 
-    def self.validate(token, transaction)
-      status = PuntoPagos::Status.new
-      status.check(token, transaction.id.to_s, transaction.amount_to_s)
-
-      if status.valid?
-        respond_success(token)
-      else
-        respond_error(token, status.error)
-      end
-    end
-
     def error
       resource.errors.messages[:base].first
     end
@@ -63,20 +52,16 @@ module PuntoPagosRails
     def self.respond_success(token)
       transaction = processing_transaction(token)
       return if transaction.nil?
-      transaction.resource.run_callbacks :payment_success do
-        transaction.complete
-        transaction.save
-      end
+      transaction.complete
+      transaction.save
       { respuesta: SUCCESS_CODE, token: token }
     end
 
     def self.respond_error(token, error)
       transaction = processing_transaction(token)
       return if transaction.nil?
-      transaction.resource.run_callbacks :payment_error do
-        transaction.reject_with(error)
-        transaction.save
-      end
+      transaction.reject_with(error)
+      transaction.save
       { respuesta: ERROR_CODE, error: error, token: token }
     end
 

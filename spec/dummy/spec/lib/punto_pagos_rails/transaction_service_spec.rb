@@ -80,39 +80,6 @@ RSpec.describe TransactionService do
     end
   end
 
-  describe "#validate" do
-    before do
-      allow(PuntoPagos::Status).to receive(:new).and_return(status)
-      allow(status).to receive(:check).with(
-        transaction.token, transaction.id.to_s, transaction.amount_to_s)
-    end
-
-    it "creates a status object" do
-      allow(status).to receive(:valid?).and_return(true)
-      TransactionService.validate(transaction.token, transaction)
-      expect(PuntoPagos::Status).to have_received(:new)
-    end
-
-    context "when the token is valid" do
-      it "runs callback after successful payment" do
-        allow(status).to receive(:valid?).and_return(true)
-        TransactionService.validate(transaction.token, transaction)
-        ticket.reload
-        expect(ticket.message).to eq("successful payment! #{ticket.id}")
-      end
-    end
-
-    context "when the token is invalid" do
-      it "runs error callback" do
-        allow(status).to receive(:valid?).and_return(false)
-        allow(status).to receive(:error).and_return("Transaccion Incompleta")
-        TransactionService.validate(transaction.token, transaction)
-        ticket.reload
-        expect(ticket.message).to eq("error paying ticket #{ticket.id}")
-      end
-    end
-  end
-
   describe "#notificate" do
     before do
       allow(PuntoPagos::Notification).to receive(:new).and_return(notification)
@@ -126,11 +93,6 @@ RSpec.describe TransactionService do
     end
 
     context "when the notification is valid" do
-      it "runs callback after successful payment" do
-        TransactionService.notificate({}, {})
-        expect(ticket.message).to eq("successful payment! #{ticket.id}")
-      end
-
       it "the notification is completed" do
         TransactionService.notificate({}, {})
         expect(transaction.reload.state).to eq('completed')
@@ -145,10 +107,6 @@ RSpec.describe TransactionService do
 
       it "the notification is rejected" do
         expect(transaction.reload.state).to eq('rejected')
-      end
-
-      it "calls error callbacks" do
-        expect(ticket.message).to eq("error paying ticket #{ticket.id}")
       end
     end
 
