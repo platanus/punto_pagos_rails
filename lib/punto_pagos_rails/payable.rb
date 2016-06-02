@@ -1,7 +1,7 @@
 require "active_support/concern"
 
 module PuntoPagosRails
-  module ResourceExtension
+  module Payable
     extend ActiveSupport::Concern
 
     included do

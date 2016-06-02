@@ -22,7 +22,7 @@ El instalador hace lo siguiente:
 
 1. Revisa si el modelo (la entidad pagable) existe. Si no existe, lo crea y, en cualquier caso, agrega el atributo `amount`. Amount es el atributo donde configuraremos el valor de la entidad pagable. Por ej: si hicimos una aplicación para vender tickets para festivales y el valor de un ticket es $100, ese 100 deberá almacenarse en `amount`.
 
-2. Incluye en este modelo el módulo: `PuntoPagosRails::ResourceExtension`. Este módulo extiende a nuestro modelo con todos los métodos, atributos, etc. relacionados con el pago que detallaré luego.
+2. Incluye en este modelo el módulo: `PuntoPagosRails::Payable`. Este módulo extiende a nuestro modelo con todos los métodos, atributos, etc. relacionados con el pago que detallaré luego.
 
 3. Copia la migración que crea la tabla `punto_pagos_rails_transactions`. En esta tabla se almacenarán todos los pagos (o intentos de pago) que se realizarán sobre nuestro recurso pagable. Es decir, **un recurso puede tener 0 o muchas transacciones**. El caso normal es que tenga una, pero pueden exisitir más si falla el pago por ej. Estas transacciones tendrán alguno de los siguientes estados:
     - `pending` estado inicial de una transacción.

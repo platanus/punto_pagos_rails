@@ -14,7 +14,7 @@ class PuntoPagosRails::PaymentFlowGenerator < Rails::Generators::Base
   def extend_payable_abilities
     line = "class #{payable_class} < ActiveRecord::Base"
     gsub_file "app/models/#{payable}.rb", /(#{Regexp.escape(line)})/mi do |match|
-      "#{match}\n  include PuntoPagosRails::ResourceExtension\n"
+      "#{match}\n  include PuntoPagosRails::Payable\n"
     end
   end
 
