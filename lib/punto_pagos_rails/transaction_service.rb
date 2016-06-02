@@ -1,23 +1,23 @@
 module PuntoPagosRails
   class TransactionService
     attr_accessor :process_url
-    attr_reader :resource_id
+    attr_reader :payable
 
     SUCCESS_CODE = "99"
     ERROR_CODE = "00"
 
-    def initialize(resource_id)
-      @resource_id = resource_id
+    def initialize(payable)
+      @payable = payable
     end
 
     def create
-      transaction = resource.transactions.create!
+      transaction = payable.transactions.create!
 
       request = PuntoPagos::Request.new
       response = request.create(transaction.id.to_s, transaction.amount_to_s, nil)
 
       if !response.success?
-        resource.errors.add :base, I18n.t("punto_pagos_rails.errors.invalid_puntopagos_response")
+        payable.errors.add :base, I18n.t("punto_pagos_rails.errors.invalid_puntopagos_response")
         return false
       end
 
@@ -39,7 +39,7 @@ module PuntoPagosRails
     end
 
     def error
-      resource.errors.messages[:base].first
+      payable.errors.messages[:base].first
     end
 
     def self.processing_transaction(token)
@@ -69,25 +69,21 @@ module PuntoPagosRails
 
     def init_transaction(transaction, token)
       if token.blank?
-        resource.errors.add(:base,
+        payable.errors.add(:base,
           I18n.t("punto_pagos_rails.errors.invalid_returned_puntopagos_token"))
         return false
       end
 
       if token_repeated?(token)
-        resource.errors.add :base, I18n.t("punto_pagos_rails.errors.repeated_token_given")
+        payable.errors.add :base, I18n.t("punto_pagos_rails.errors.repeated_token_given")
         return false
       end
 
-      transaction.update!(token: token, amount: resource.amount)
+      transaction.update!(token: token, amount: payable.amount)
     end
 
     def token_repeated?(token)
       Transaction.where(token: token).any?
-    end
-
-    def resource
-      @resource ||= PuntoPagosRails.resource_class.find(resource_id)
     end
   end
 end

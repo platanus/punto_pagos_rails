@@ -4,7 +4,7 @@ include PuntoPagosRails
 
 RSpec.describe TransactionService do
   let(:ticket) { Ticket.create amount: 22 }
-  let(:service) { TransactionService.new(ticket.id) }
+  let(:service) { TransactionService.new(ticket) }
   let(:request) { double }
   let(:response) { double }
   let(:token) { 'XXXXX' }
@@ -12,7 +12,7 @@ RSpec.describe TransactionService do
   let(:notification) { double }
   let(:status) { double }
   let(:transaction) do
-    PuntoPagosRails::Transaction.create(resource: ticket, token: SecureRandom.base64)
+    PuntoPagosRails::Transaction.create(payable: ticket, token: SecureRandom.base64)
   end
 
   before do
@@ -71,7 +71,7 @@ RSpec.describe TransactionService do
         expect(service.create).to eq(false)
       end
 
-      it "sets resource error" do
+      it "sets payable error" do
         allow(Ticket).to receive(:find).with(ticket.id).and_return(ticket)
         service.create
         expect(ticket.errors[:base]).to include(

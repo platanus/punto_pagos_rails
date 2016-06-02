@@ -5,7 +5,7 @@ module PuntoPagosRails
     extend ActiveSupport::Concern
 
     included do
-      has_many :transactions, class_name: "PuntoPagosRails::Transaction", foreign_key: :resource_id
+      has_many :transactions, as: :payable, class_name: "PuntoPagosRails::Transaction"
 
       def paid?
         return false unless transactions.any?

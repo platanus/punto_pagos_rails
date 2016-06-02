@@ -4,9 +4,9 @@ module PuntoPagosRails
   class Transaction < ActiveRecord::Base
     include AASM
 
-    belongs_to :resource, class_name: PuntoPagosRails.resource_class_name
+    belongs_to :payable, polymorphic: true
 
-    delegate :amount, to: :resource
+    delegate :amount, to: :payable
 
     aasm column: :state do
       state :pending, initial: true
