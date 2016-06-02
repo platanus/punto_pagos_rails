@@ -43,4 +43,19 @@ describe TransactionsController do
       end
     end
   end
+
+  describe "#success" do
+    let!(:transaction) { create(:transaction) }
+
+    subject { get :success, token: transaction.token }
+
+    it "renders success template" do
+      expect(subject).to render_template(:success)
+    end
+
+    it "shows success view" do
+      get :success, token: transaction.token
+      expect(response.body).to match /Success Ticket ##{Ticket.last.id}/im
+    end
+  end
 end
