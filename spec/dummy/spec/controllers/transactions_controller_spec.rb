@@ -58,4 +58,19 @@ describe TransactionsController do
       expect(response.body).to match /Success Ticket ##{Ticket.last.id}/im
     end
   end
+
+  describe "#error" do
+    let!(:transaction) { create(:transaction) }
+
+    subject { get :error, token: transaction.token }
+
+    it "renders error template" do
+      expect(subject).to render_template(:error)
+    end
+
+    it "shows error view" do
+      get :error, token: transaction.token
+      expect(response.body).to match /Error Ticket ##{Ticket.last.id}/im
+    end
+  end
 end
