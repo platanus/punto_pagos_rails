@@ -13,66 +13,84 @@ gem 'punto_pagos_rails'
 Luego, se debe correr el generador
 
 ```bash
-$ rails generate punto_pagos_rails:install tu_entidad_pagable
+$ rails generate punto_pagos_rails:install
 ```
 
-**tu_entidad_pagable** es el nombre del modelo de `ActiveRecord` que hace referencia a la entidad o recurso "pagable" de tu aplicación. Por ej: ticket, appointment, product, etc.
+y por último:
 
-El instalador hace lo siguiente:
-
-1. Revisa si el modelo (la entidad pagable) existe. Si no existe, lo crea y, en cualquier caso, agrega el atributo `amount`. Amount es el atributo donde configuraremos el valor de la entidad pagable. Por ej: si hicimos una aplicación para vender tickets para festivales y el valor de un ticket es $100, ese 100 deberá almacenarse en `amount`.
-
-2. Incluye en este modelo el módulo: `PuntoPagosRails::Payable`. Este módulo extiende a nuestro modelo con todos los métodos, atributos, etc. relacionados con el pago que detallaré luego.
-
-3. Copia la migración que crea la tabla `punto_pagos_rails_transactions`. En esta tabla se almacenarán todos los pagos (o intentos de pago) que se realizarán sobre nuestro recurso pagable. Es decir, **un recurso puede tener 0 o muchas transacciones**. El caso normal es que tenga una, pero pueden exisitir más si falla el pago por ej. Estas transacciones tendrán alguno de los siguientes estados:
-    - `pending` estado inicial de una transacción.
-    - `completed` una transacción estará en este estado cuando el pago sea realizado con éxito.
-    - `rejected` una transacción tendrá este estado cuando el pago falle.
-
-4. Crea un initializer para nuestra gema en: `/your_app/config/initializers/punto_pagos_rails.rb` con la configuración básica para funcionar.
-
-5. Crea `/your_app/config/puntopagos.yml`. Este archivo debe modificarse con las credenciales para la comunicación con PuntoPago.
-
-6. Copia la vista de "pago exitoso" en: `app/views/punto_pagos_rails/transactions/success.html.erb`. Esta es la vista donde nos redirigirá PuntoPagos cuando una trasacción se complete sin errores. La idea es modificar el estilo de esta view para que se adapte al de nuestra aplicación. Aquí podremos acceder a la variable: `@resource` que contiene la instancia de lo que acabamos de pagar. Por ej: si nuestro modelo pagable es `Ticket`, `@resource` contendrá una instancia de `Ticket`.
-
-7. Copia la vista de "pago no exitoso" en: `app/views/punto_pagos_rails/transactions/error.html.erb`. Esta es la vista donde nos redirigirá PuntoPagos cuando falle una transacción. Del mismo modo que con la vista de `success.html`, se podrá acceder al `@resource` para dar más detalle al usuario de lo que está pasando.
-
-Por útlimo:
+```bash
+$ bundle install
+```
 
 ```bash
 $ rake db:migrate
 ```
 
+El instalador hace lo siguiente:
+
+1. Copia la migración que crea la tabla `transactions`. En está tabla se almacenará información sobre los pagos (o intentos de pago) realizados.
+
+2. Crea `/your_app/config/puntopagos.yml`. Este archivo debe modificarse con las credenciales para la comunicación con PuntoPagos.
+
+Una vez que hayamos corrido el instalador, se necesitará crear un **flujo de pago** para un **modelo pagable** de nuestra aplicación.
+Un **modelo pagable** es básicamente una clase heredada de `ActiveRecord::Base` que representa un objeto que se puede vender. Por ej: un ticket para un concierto, una cita con el médico, etc. De esta manera, los modelos `Ticket` o `Appointment`, podrían ser buenos ejemplos de **modelo pagable**.
+
+## Flujo de Pago
+
+Para crear un nuevo flujo de pagos, se debe correr el siguiente generador:
+
+```bash
+rails generate punto_pagos_rails:payment_flow modelo_pagable controlador
+```
+
+Por ejemplo:
+
+```bash
+rails generate punto_pagos_rails:payment_flow ticket transactions
+```
+
+y luego:
+
+```bash
+$ rake db:migrate
+```
+
+Tomando `Ticket` como ejemplo de modelo pagable y `transactions` como controlador, el generador hace lo siguiente:
+
+1. Revisa si el modelo `Ticket` existe. Si no existe, lo crea y, en cualquier caso, agrega el atributo `amount`. Amount es el atributo donde configuraremos el valor de una instancia de `Ticket`. Por ej: si hicimos una aplicación para vender tickets para festivales y el valor de un ticket es $100, ese 100 deberá almacenarse en `amount`.
+
+2. Incluye en `Ticket` el mixin: `PuntoPagosRails::Payable`. Este módulo extiende a nuestro modelo con todos los métodos, atributos, etc. relacionados con el pago que detallaré luego.
+
+3. En base a un template, crea el `TransactionsController` encargado de manejar los pagos de los tickets. Este controller, tiene las acciones (y por tanto las url) requeridas por [PuntoPagos](https://www.puntopagos.com/).
+> Cualquier modificación que se desee realizar al flujo normal (y más básico) de pago se deberá efectuar en este controlador.
+
+4. Agrega las url de las que hablé en el paso anterior, al `routes.rb`
+
+5. Copia la vista de "pago exitoso" en: `app/views/transactions/success.html.erb`. Esta es la vista donde nos redirigirá PuntoPagos cuando una transacción se complete sin errores. La idea es modificar el estilo de esta vista para que se adapte al de nuestra aplicación.
+
+6. Copia la vista de "pago no exitoso" en: `app/views/transactions/error.html.erb`. Esta es la vista donde nos redirigirá PuntoPagos cuando falle una transacción.
+
 ## Cómo realizar un pago?
 
-Luego de instalar la gema, en algún lado de nuestra aplicación, deberemos tener el siguiente código:
-
-En un controller...
-
-```ruby
-def some_action
-  @ticket = Ticket.create! amount: 100
-end
-```
-
-Obviamente `@ticket` hace referencia a una instancia de nuestro modelo pagable. Esto variará dependiendo de nuestra aplicación.
-
-En la vista de `some_action`...
+Luego de instalar la gema y crear un flujo de pago, en alguna vista de nuestra aplicación y siguiendo con el modelo `Ticket` como ejemplo, deberemos tener el siguiente código:
 
 ```
-<%= form_tag(punto_pagos_rails.transaction_create_path({resource_id: @ticket.id})) do %>
-  <%= submit_tag "Pagar!" %>
+<%= form_for(:ticket, url: transaction_create_path) do |f| %>
+  Monto: <%= f.number_field(:amount) %><br />
+  <%= f.submit "Pagar!" %>
 <% end %>
 ```
 
+El hacer click en "Pagar!" desatará el siguiente flujo:
+
+1. Se hace un `POST your_app/transactions/create` con el `amount` del ticket. Esto crea una instancia de `Ticket` relacionada con una de `Transaction`. Si todo sale bien, se redirige a `puntopagos.com`. De lo contrario, a una vista de error.
+2. Suponiendo que el paso anterior fué exitoso y ya en "terreno de puntopagos", el usuario realiza el pago. Independientemente de resultado de la transacción, puntopagos hace un `POST your_app/transactions/notification` con información sobre la transacción realizada.
+3. Dentro de la acción `notification` de nuestro `TransactionsController`, se analizan los datos enviados por puntopagos y contestamos con un json de éxito o error.
+4. Dependiendo de lo que hayamos contestado en el paso anterior, puntopagos nos redirigirá a `GET your_app/transactions/success` o `GET your_app/transactions/error`
+
+> Este flujo responde al exigido por PuntoPagos para trabajar bajo SSL.
+
 Eso es todo!
-
-## Flujo
-
-1. Usuario hace clic en el botón pagar.
-2. Eso hace una redirección a PuntoPagos.
-3. El usuario relaliza el pago.
-4. PuntoPagos redirige a vista de éxito (en caso de transacción exitosa) o vista de error si sucede lo contrario.
 
 ## Funcionalidad en el modelo
 
@@ -82,6 +100,13 @@ Suponiendo que mi recurso pagable es: `Ticket` y tengo una instancia de este mod
 @ticket.transactions #para ver los intentos de pago (transacciones) relacionados al recurso.
 @ticket.paid? #para saber si el recurso se pagó exitosamente.
 ```
+
+Un ticket puede tener varias transacciones o intentos de pago, ya que un pago puede no ser exitoso la primera vez por diversos motivos como podría ser, por ejemplo, falta de fondos en la cuenta de quien paga. Por esto, es que las transacciones tienen alguno de los siguientes estados:
+
+- `pending` estado inicial de una transacción.
+- `completed` una transacción estará en este estado cuando el pago sea realizado con éxito.
+- `rejected` una transacción tendrá este estado cuando el pago falle.
+
 
 ## Contributing
 
@@ -101,4 +126,4 @@ punto_pagos_rails is maintained by [platanus](http://platan.us).
 
 ## License
 
-PuntoPagosRails is © 2015 platanus, spa. It is free software and may be redistributed under the terms specified in the LICENSE file.
+PuntoPagosRails is © 2016 platanus, spa. It is free software and may be redistributed under the terms specified in the LICENSE file.
