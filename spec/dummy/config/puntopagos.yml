@@ -1,12 +1,12 @@
 development:
-  environment:        "sandbox"
-  puntopagos_key:     "YOUR-API-KEY"
-  puntopagos_secret:  "YOUR-APP-SECRET"
+  environment:        <%= ENV["PUNTOPAGOS_ENV"]%>
+  puntopagos_key:     <%= ENV["PUNTOPAGOS_KEY"]%>
+  puntopagos_secret:  <%= ENV["PUNTOPAGOS_SECRET"]%>
 test:
-  environment:        "sandbox"
-  puntopagos_key:     "YOUR-API-KEY"
-  puntopagos_secret:  "YOUR-APP-SECRET"
+  environment:        <%= ENV["PUNTOPAGOS_ENV_TEST"]%>
+  puntopagos_key:     <%= ENV["PUNTOPAGOS_KEY_TEST"]%>
+  puntopagos_secret:  <%= ENV["PUNTOPAGOS_SECRET_TEST"]%>
 production:
-  environment:        "production"
-  puntopagos_key:     "YOUR-API-KEY"
-  puntopagos_secret:  "YOUR-APP-SECRET"
+  environment:        <%= ENV["PUNTOPAGOS_ENV"]%>
+  puntopagos_key:     <%= ENV["PUNTOPAGOS_KEY"]%>
+  puntopagos_secret:  <%= ENV["PUNTOPAGOS_SECRET"]%>

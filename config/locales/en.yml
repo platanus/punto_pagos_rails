@@ -2,9 +2,6 @@ en:
   punto_pagos_rails:
     success:
       title: Transaction successfully completed
-      detail: "The %{resource} #%{id} for the amount of $%{amount} was made"
-    error:
-      detail: "The payment for %{resource} #%{id} for the amount of $%{amount} was declined"
     errors:
       invalid_puntopagos_response: Invalid PuntoPagos response
       invalid_returned_puntopagos_token: Invalid returned PuntoPagos token

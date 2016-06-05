@@ -1,5 +1,5 @@
 FactoryGirl.define do
   factory :ticket do
-    amount 1
+    amount 5000
   end
 end

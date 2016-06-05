@@ -12,3 +12,7 @@ gemspec
 
 # To use debugger
 # gem 'debugger'
+
+gem("puntopagos",
+  git: "https://github.com/acidlabs/puntopagos-ruby.git",
+  ref: "54167cc5d081abd1cb110832af1aebefcf734e78")
