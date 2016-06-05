@@ -1,6 +1,8 @@
 ---
 language: ruby
 sudo: false
-script: bundle exec rspec spec
+script:
+  - cd spec/dummy && RAILS_ENV=test bundle exec rake db:create db:migrate
+  - cd ../.. && bundle exec rspec spec
 rvm:
   - "2.0.0"

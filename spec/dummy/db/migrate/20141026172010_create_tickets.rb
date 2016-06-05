@@ -4,7 +4,7 @@ class CreateTickets < ActiveRecord::Migration
       t.integer :amount
       t.string :message
 
-      t.timestamps
+      t.timestamps null: false
     end
   end
 end

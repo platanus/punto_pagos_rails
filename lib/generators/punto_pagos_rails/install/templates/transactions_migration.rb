@@ -7,7 +7,7 @@ class CreatePuntoPagosRailsTransactions < ActiveRecord::Migration
       t.string :error
       t.string :state
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index(:punto_pagos_rails_transactions,

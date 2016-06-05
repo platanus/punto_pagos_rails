@@ -11,26 +11,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160602004614) do
+ActiveRecord::Schema.define(version: 20160605212231) do
 
   create_table "punto_pagos_rails_transactions", force: :cascade do |t|
     t.integer  "payable_id"
-    t.string   "payable_type", limit: 255
-    t.string   "token",        limit: 255
+    t.string   "payable_type"
+    t.string   "token"
     t.integer  "amount"
-    t.string   "error",        limit: 255
-    t.string   "state",        limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string   "error"
+    t.string   "state"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   add_index "punto_pagos_rails_transactions", ["payable_id", "payable_type"], name: "index_punto_pagos_rails_transactions_on_payable", unique: true
 
   create_table "tickets", force: :cascade do |t|
     t.integer  "amount"
-    t.string   "message",    limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string   "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end
