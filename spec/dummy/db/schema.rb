@@ -13,22 +13,22 @@
 
 ActiveRecord::Schema.define(version: 20160602004614) do
 
-  create_table "punto_pagos_rails_transactions", force: true do |t|
+  create_table "punto_pagos_rails_transactions", force: :cascade do |t|
     t.integer  "payable_id"
-    t.string   "payable_type"
-    t.string   "token"
+    t.string   "payable_type", limit: 255
+    t.string   "token",        limit: 255
     t.integer  "amount"
-    t.string   "error"
-    t.string   "state"
+    t.string   "error",        limit: 255
+    t.string   "state",        limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "punto_pagos_rails_transactions", ["payable_id", "payable_type"], name: "index_punto_pagos_rails_transactions_on_payable", unique: true
 
-  create_table "tickets", force: true do |t|
+  create_table "tickets", force: :cascade do |t|
     t.integer  "amount"
-    t.string   "message"
+    t.string   "message",    limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
