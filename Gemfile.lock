@@ -9,7 +9,7 @@ GIT
 PATH
   remote: .
   specs:
-    punto_pagos_rails (0.2.0)
+    punto_pagos_rails (1.0.0)
       aasm (~> 4.0, >= 4.0.4)
       rails (~> 4.2, >= 4.2.0)
 
@@ -191,4 +191,4 @@ DEPENDENCIES
   sqlite3
 
 BUNDLED WITH
-   1.12.4
+   1.12.5
