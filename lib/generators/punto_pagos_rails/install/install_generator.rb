@@ -8,6 +8,6 @@ class PuntoPagosRails::InstallGenerator < Rails::Generators::Base
   end
 
   def create_initializer
-    template "puntopagos.yml", "config/puntopagos.yml"
+    copy_file "puntopagos.yml", "config/puntopagos.yml"
   end
 end
