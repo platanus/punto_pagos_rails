@@ -7,8 +7,11 @@ Esta gema es un engine construído sobre [puntopagos-ruby](https://github.com/ac
 Agrega a tu `Gemfile`
 
 ```ruby
+gem "puntopagos", git: "https://github.com/acidlabs/puntopagos-ruby.git", ref: "54167cc5d081abd1cb110832af1aebefcf734e78"
 gem 'punto_pagos_rails'
 ```
+
+> Como pueden ver, la gema de puntopagos hace referencia a un commit específico. Este commit es el que permite pasar la configuración de puntopagos como variables ambientales. Como [puntopagos-ruby](https://github.com/acidlabs/puntopagos-ruby) no ha hecho el release que contiene ese cambio, es que necesitamos hacer la referencia al commit manualmente.
 
 Luego, se debe correr el generador
 
