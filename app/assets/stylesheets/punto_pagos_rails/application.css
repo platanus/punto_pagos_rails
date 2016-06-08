@@ -13,37 +13,4 @@
  *= require_tree .
  *= require_self
  */
-
-.puntopagos {
-  width: 100%;
-  margin-top: 10%;
-  font-family: Arial, Helvetica, sans-serif;
-  text-align: center;
-}
-
-.puntopagos h2 {
-  font-size: 30px;
-}
-
-.puntopagos p {
-  font-size: 16px;
-}
-
-.puntopagos .view {
-  width: 500px;
-  margin: auto;
-  padding: 20px 20px 30px 20px;
-}
-
-.puntopagos .view.success {
-  color: #565656;
-  background-color: #e4dddd;
-  border: solid 1px #ccc5c5;
-}
-
-.puntopagos .view.error {
-  color: #b94a48;
-  background-color: #f2dede;
-  border: solid 1px #eed3d7;
-}
-
+ 

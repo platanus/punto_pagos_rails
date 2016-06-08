@@ -23,8 +23,8 @@ class PuntoPagosRails::PaymentFlowGenerator < Rails::Generators::Base
   end
 
   def copy_views
-    copy_file("success.html.erb", "app/views/#{controller_name}/success.html.erb")
-    copy_file("error.html.erb", "app/views/#{controller_name}/error.html.erb")
+    template("success.html.erb", "app/views/#{controller_name}/success.html.erb")
+    template("error.html.erb", "app/views/#{controller_name}/error.html.erb")
   end
 
   def add_routes

@@ -12,22 +12,16 @@ module PuntoPagosRails
 
     def create
       transaction = payable.transactions.create!
-
-      request = PuntoPagos::Request.new
-      response = request.create(transaction.id.to_s, transaction.amount_to_s, nil)
+      response = PuntoPagos::Request.new.create(transaction.id.to_s, transaction.amount_to_s, nil)
 
       if !response.success?
-        payable.errors.add :base, I18n.t("punto_pagos_rails.errors.invalid_puntopagos_response")
+        payable.errors.add(:base, I18n.t("punto_pagos_rails.errors.invalid_puntopagos_response"))
         return false
       end
 
       init_transaction(transaction, response.get_token).tap do |transaction_result|
         self.process_url = response.payment_process_url if transaction_result
       end
-    end
-
-    def error
-      payable.errors.messages[:base].first
     end
 
     private
@@ -40,7 +34,7 @@ module PuntoPagosRails
       end
 
       if repeated_token?(token)
-        payable.errors.add :base, I18n.t("punto_pagos_rails.errors.repeated_token_given")
+        payable.errors.add(:base, I18n.t("punto_pagos_rails.errors.repeated_token_given"))
         return false
       end
 
@@ -65,6 +59,26 @@ module PuntoPagosRails
       end
 
       private
+
+      def method_missing(method, *args, &block)
+        if method.to_s.ends_with?("_by_token")
+          payable_class = method.to_s.chomp("_by_token")
+          failed = payable_class.slice!("failed_") if method.to_s.starts_with?("failed_")
+          return payable_by_token(payable_class.classify.constantize, args.first, !!failed)
+        end
+
+        super
+      end
+
+      def payable_by_token(payable_class, params, with_error = false)
+        payable = payable_class.by_token(params[:token])
+
+        if payable && with_error
+          payable.errors.add(:base, I18n.t("punto_pagos_rails.errors.invalid_puntopagos_payment"))
+        end
+
+        payable
+      end
 
       def processing_transaction(token)
         transaction = Transaction.find_by_token(token)

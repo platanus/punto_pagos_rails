@@ -80,6 +80,24 @@ RSpec.describe TransactionService do
     end
   end
 
+  describe "#xxx_by_token" do
+    it "returns payable (ticket) by token" do
+      payable = TransactionService.ticket_by_token(token: transaction.token)
+      expect(payable.class).to eq(Ticket)
+      expect(payable.id).to eq(ticket.id)
+      expect(payable.errors).to be_empty
+    end
+  end
+
+  describe "#failed_xxx_by_token" do
+    it "returns payable (ticket) by token with loaded error" do
+      payable = TransactionService.failed_ticket_by_token(token: transaction.token)
+      expect(payable.class).to eq(Ticket)
+      expect(payable.id).to eq(ticket.id)
+      expect(payable.errors.messages[:base]).not_to be_empty
+    end
+  end
+
   describe "#notificate" do
     before do
       allow(PuntoPagos::Notification).to receive(:new).and_return(notification)

@@ -2,37 +2,23 @@ class <%= controller_class %> < ApplicationController
   def create
     @<%= payable %> = <%= payable_class %>.create!(create_params)
     srv = PuntoPagosRails::TransactionService.new(@<%= payable %>)
-
-    if srv.create
-      redirect_to(srv.process_url)
-    else
-      render_payment_error_view(srv.error)
-    end
+    srv.create ? redirect_to(srv.process_url) : render(:error)
   end
 
   def notification
     response = PuntoPagosRails::TransactionService.notificate(params, request.headers)
-    render(json: response)
+    render json: response
   end
 
   def success
-    @<%= payable %> = <%= payable %>_by_token
+    @<%= payable %> = PuntoPagosRails::TransactionService.<%= payable %>_by_token(params)
   end
 
   def error
-    @<%= payable %> = <%= payable %>_by_token
-    render_payment_error_view(I18n.t("punto_pagos_rails.errors.invalid_puntopagos_payment"))
+    @<%= payable %> = PuntoPagosRails::TransactionService.failed_<%= payable %>_by_token(params)
   end
 
   private
-
-  def render_payment_error_view(error_message)
-    render("error", locals: { error_message: error_message })
-  end
-
-  def <%= payable %>_by_token
-    @<%= payable %> ||= <%= payable_class %>.by_token(params[:token])
-  end
 
   def create_params
     params.require(:<%= payable %>).permit(:amount)

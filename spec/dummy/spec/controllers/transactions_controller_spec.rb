@@ -21,13 +21,10 @@ describe TransactionsController do
 
     context "with invalid transaction creation" do
       render_views
-      let(:fake_error) { "some puntopagos error" }
 
       before do
         expect_any_instance_of(PuntoPagosRails::TransactionService).to(
           receive(:create).and_return(false))
-        expect_any_instance_of(PuntoPagosRails::TransactionService).to(
-          receive(:error).and_return(fake_error))
       end
 
       subject { post :create, ticket: { amount: 5000 } }
@@ -38,8 +35,7 @@ describe TransactionsController do
 
       it "shows error in view" do
         post :create, ticket: { amount: 5000 }
-        expect(response.body).to match /#{fake_error}/im
-        expect(response.body).to match /Error Ticket ##{Ticket.last.id}/im
+        expect(response.body).to match /Error view/
       end
     end
   end
@@ -58,7 +54,6 @@ describe TransactionsController do
 
   describe "#success" do
     let!(:transaction) { create(:transaction) }
-
     subject { get :success, token: transaction.token }
 
     it "renders success template" do
@@ -67,13 +62,13 @@ describe TransactionsController do
 
     it "shows success view" do
       get :success, token: transaction.token
-      expect(response.body).to match /Success Ticket ##{Ticket.last.id}/im
+      expect(response.body).to match /Ticket/
+      expect(response.body).to match /Success view/
     end
   end
 
   describe "#error" do
     let!(:transaction) { create(:transaction) }
-
     subject { get :error, token: transaction.token }
 
     it "renders error template" do
@@ -82,7 +77,7 @@ describe TransactionsController do
 
     it "shows error view" do
       get :error, token: transaction.token
-      expect(response.body).to match /Error Ticket ##{Ticket.last.id}/im
+      expect(response.body).to match /Error view/
     end
   end
 end
