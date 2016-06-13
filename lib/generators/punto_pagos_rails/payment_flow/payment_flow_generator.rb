@@ -4,6 +4,7 @@ class PuntoPagosRails::PaymentFlowGenerator < Rails::Generators::Base
   argument(:payable_model_name, type: :string, required: true, banner: "payable_model_name")
   argument(:payments_controller_name,
     banner: "payments_controller_name", type: :string, default: "transactions")
+  class_option :ssl, type: :boolean, default: false
 
   def create_payable_model
     Rails.application.eager_load!
@@ -32,7 +33,7 @@ class PuntoPagosRails::PaymentFlowGenerator < Rails::Generators::Base
     gsub_file "config/routes.rb", /(#{Regexp.escape(line)})/mi do |match|
       <<-HERE.gsub(/^ {9}/, '')
          #{match}
-           post "#{controller_name}/notification", to: "#{controller_name}#notification"
+           #{options.ssl? ? 'post' : 'get'} "#{controller_name}/notification#{options.ssl? ? '' : '/:token'}", to: "#{controller_name}#notification"
            get "#{controller_name}/error/:token", to: "#{controller_name}#error", as: :#{singular_controller_name}_error
            get "#{controller_name}/success/:token", to: "#{controller_name}#success", as: :#{singular_controller_name}_success
            post "#{controller_name}/create", to: "#{controller_name}#create", as: :#{singular_controller_name}_create
@@ -76,5 +77,9 @@ class PuntoPagosRails::PaymentFlowGenerator < Rails::Generators::Base
 
   def create_payable
     generate "model #{payable} amount:integer --no-fixture"
+  end
+
+  def ssl?
+    options.ssl?
   end
 end

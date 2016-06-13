@@ -6,8 +6,13 @@ class <%= controller_class %> < ApplicationController
   end
 
   def notification
+<% if ssl? -%>
     response = PuntoPagosRails::TransactionService.notificate(params, request.headers)
     render json: response
+<% else -%>
+    PuntoPagosRails::TransactionService.complete_<%= payable %>_transaction(params)
+    head(200)
+<% end -%>
   end
 
   def success
