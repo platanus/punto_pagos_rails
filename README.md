@@ -73,6 +73,8 @@ Tomando `Ticket` como ejemplo de modelo pagable y `transactions` como controlado
 
 6. Copia la vista de "pago no exitoso" en: `app/views/transactions/error.html.erb`. Esta es la vista donde nos redirigirá PuntoPagos cuando falle una transacción.
 
+> Por defecto, se genera un flow para trabajar sin SSL. Si se desea activar el modo SSL, se deeb pasar la opción `--ssl` al generador.
+
 ## Cómo realizar un pago?
 
 Luego de instalar la gema y crear un flujo de pago, en alguna vista de nuestra aplicación y siguiendo con el modelo `Ticket` como ejemplo, deberemos tener el siguiente código:
@@ -87,11 +89,13 @@ Luego de instalar la gema y crear un flujo de pago, en alguna vista de nuestra a
 El hacer click en "Pagar!" desatará el siguiente flujo:
 
 1. Se hace un `POST your_app/transactions/create` con el `amount` del ticket. Esto crea una instancia de `Ticket` relacionada con una de `Transaction`. Si todo sale bien, se redirige a `puntopagos.com`. De lo contrario, a una vista de error.
-2. Suponiendo que el paso anterior fué exitoso y ya en "terreno de puntopagos", el usuario realiza el pago. Independientemente de resultado de la transacción, puntopagos hace un `POST your_app/transactions/notification` con información sobre la transacción realizada.
-3. Dentro de la acción `notification` de nuestro `TransactionsController`, se analizan los datos enviados por puntopagos y contestamos con un json de éxito o error.
-4. Dependiendo de lo que hayamos contestado en el paso anterior, puntopagos nos redirigirá a `GET your_app/transactions/success` o `GET your_app/transactions/error`
-
-> Este flujo responde al exigido por PuntoPagos para trabajar bajo SSL.
+2. Suponiendo que el paso anterior fué exitoso y ya en "terreno de puntopagos", el usuario realiza el pago. Independientemente de resultado de la transacción, puntopagos:
+ 1. **Con SSL**, hace un `POST your_app/transactions/notification` con información sobre la transacción realizada.
+ 2. **Sin SSL**, hace un `GET your_app/transactions/notification:token` con el token de la transacción realizada.
+3. Dentro de la acción `notification` de nuestro `TransactionsController`, se analizan los datos enviados por puntopagos, se actualiza la información de la transacción (se completa o rechaza) y se contesta:
+ 1. **Con SSL**, con un json de éxito o error.
+ 2. **Sin SSL**, un `200 OK`
+4. Dependiendo del resultado del paso anterior, puntopagos nos redirigirá a `GET your_app/transactions/success` o `GET your_app/transactions/error`
 
 Eso es todo!
 
