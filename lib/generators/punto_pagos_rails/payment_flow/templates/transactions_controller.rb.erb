@@ -10,7 +10,7 @@ class <%= controller_class %> < ApplicationController
     response = PuntoPagosRails::TransactionService.notificate(params, request.headers)
     render json: response
 <% else -%>
-    PuntoPagosRails::TransactionService.complete_<%= payable %>_transaction(params)
+    PuntoPagosRails::TransactionService.complete(params)
     head(200)
 <% end -%>
   end

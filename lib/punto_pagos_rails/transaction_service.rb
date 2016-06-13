@@ -48,13 +48,28 @@ module PuntoPagosRails
     class << self
       def notificate(params, headers)
         notification = PuntoPagos::Notification.new
-        tken = params[:token]
-        err = params[:error]
+        token = params[:token]
+        error = params[:error]
 
         if notification.valid?(headers, params)
-          respond_success(tken)
+          complete_transaction(token)
+          { respuesta: SUCCESS_CODE, token: token }
         else
-          respond_error(tken, err)
+          reject_transaction(token, error)
+          { respuesta: ERROR_CODE, error: error, token: token }
+        end
+      end
+
+      def complete(params)
+        transaction = processing_transaction(params[:token])
+        return false unless transaction
+        status = PuntoPagos::Status.new
+        status.check(transaction.token, transaction.id.to_s, transaction.amount_to_s)
+
+        if status.valid?
+          complete_transaction(transaction.token)
+        else
+          reject_transaction(transaction.token, status.error)
         end
       end
 
@@ -87,20 +102,18 @@ module PuntoPagosRails
         transaction
       end
 
-      def respond_success(token)
+      def complete_transaction(token)
         transaction = processing_transaction(token)
         return if transaction.nil?
         transaction.complete
         transaction.save
-        { respuesta: SUCCESS_CODE, token: token }
       end
 
-      def respond_error(token, error)
+      def reject_transaction(token, error)
         transaction = processing_transaction(token)
         return if transaction.nil?
         transaction.reject_with(error)
         transaction.save
-        { respuesta: ERROR_CODE, error: error, token: token }
       end
     end
   end
