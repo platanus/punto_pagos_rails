@@ -105,15 +105,13 @@ module PuntoPagosRails
       def complete_transaction(token)
         transaction = processing_transaction(token)
         return if transaction.nil?
-        transaction.complete
-        transaction.save
+        transaction.complete!
       end
 
       def reject_transaction(token, error)
         transaction = processing_transaction(token)
         return if transaction.nil?
         transaction.reject_with(error)
-        transaction.save
       end
     end
   end

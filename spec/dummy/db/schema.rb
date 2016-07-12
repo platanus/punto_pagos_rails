@@ -28,9 +28,10 @@ ActiveRecord::Schema.define(version: 20160605212231) do
 
   create_table "tickets", force: :cascade do |t|
     t.integer  "amount"
+    t.string   "payment_state"
     t.string   "message"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
 end

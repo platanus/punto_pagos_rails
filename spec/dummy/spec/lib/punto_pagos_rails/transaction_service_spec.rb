@@ -159,6 +159,7 @@ RSpec.describe TransactionService do
       it "completes transaction" do
         expect(TransactionService.complete(params)).to be_truthy
         expect(transaction.reload.state).to eq("completed")
+        expect(ticket.reload.payment_state).to eq("completed")
       end
     end
 
@@ -172,6 +173,7 @@ RSpec.describe TransactionService do
         expect(TransactionService.complete(params)).to be_truthy
         expect(transaction.reload.state).to eq("rejected")
         expect(transaction.error).to eq("error")
+        expect(ticket.reload.payment_state).to eq("rejected")
       end
     end
   end

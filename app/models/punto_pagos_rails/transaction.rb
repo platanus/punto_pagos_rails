@@ -6,6 +6,8 @@ module PuntoPagosRails
 
     belongs_to :payable, polymorphic: true
 
+    after_save :persist_state_in_payable
+
     delegate :amount, to: :payable
 
     aasm column: :state do
@@ -24,11 +26,16 @@ module PuntoPagosRails
 
     def reject_with(error)
       self.error = error
-      reject
+      reject!
     end
 
     def amount_to_s
       "%0.2f" % amount.to_i
+    end
+
+    def persist_state_in_payable
+      return unless payable
+      payable.update_column(:payment_state, state)
     end
   end
 end

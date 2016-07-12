@@ -9,7 +9,7 @@ class PuntoPagosRails::PaymentFlowGenerator < Rails::Generators::Base
   def create_payable_model
     Rails.application.eager_load!
     models = ActiveRecord::Base.descendants.map(&:to_s)
-    models.include?(payable_class) ? add_amount_attribute_to_payable : create_payable
+    models.include?(payable_class) ? add_payment_attributes_to_payable : create_payable
   end
 
   def extend_payable_abilities
@@ -71,12 +71,12 @@ class PuntoPagosRails::PaymentFlowGenerator < Rails::Generators::Base
     "#{payments_controller_name.classify.pluralize}Controller"
   end
 
-  def add_amount_attribute_to_payable
-    generate "migration add_amount_to_#{payable_table_name} amount:integer"
+  def add_payment_attributes_to_payable
+    generate "migration add_amount_to_#{payable_table_name} amount:integer payment_state:string"
   end
 
   def create_payable
-    generate "model #{payable} amount:integer --no-fixture"
+    generate "model #{payable} amount:integer payment_state:string --no-fixture"
   end
 
   def ssl?
