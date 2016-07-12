@@ -4,12 +4,20 @@ module PuntoPagosRails
   module Payable
     extend ActiveSupport::Concern
 
+    PAYMENT_STATES = %w{pending completed rejected}
+
     included do
+      extend Enumerize
+
       has_many :transactions, as: :payable, class_name: "PuntoPagosRails::Transaction"
+      enumerize :payment_state, in: PAYMENT_STATES,
+                                default: :pending,
+                                predicates: true,
+                                scope: true,
+                                prefix: false
 
       def paid?
-        return false unless transactions.any?
-        transactions.last.completed?
+        completed?
       end
     end
 
