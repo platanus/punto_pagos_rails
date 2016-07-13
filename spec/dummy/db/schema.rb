@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 20160605212231) do
     t.datetime "updated_at",   null: false
   end
 
-  add_index "punto_pagos_rails_transactions", ["payable_id", "payable_type"], name: "index_punto_pagos_rails_transactions_on_payable", unique: true
+  add_index "punto_pagos_rails_transactions", ["payable_id", "payable_type"], name: "index_punto_pagos_rails_transactions_on_payable"
 
   create_table "tickets", force: :cascade do |t|
     t.integer  "amount"

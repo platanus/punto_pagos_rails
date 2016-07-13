@@ -12,7 +12,6 @@ class CreatePuntoPagosRailsTransactions < ActiveRecord::Migration
 
     add_index(:punto_pagos_rails_transactions,
       [:payable_id, :payable_type],
-      name: "index_punto_pagos_rails_transactions_on_payable",
-      unique: true)
+      name: "index_punto_pagos_rails_transactions_on_payable")
   end
 end
