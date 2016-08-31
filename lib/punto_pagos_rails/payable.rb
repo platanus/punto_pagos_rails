@@ -3,6 +3,7 @@ require "active_support/concern"
 module PuntoPagosRails
   module Payable
     extend ActiveSupport::Concern
+    attr_reader :payment_method
 
     PAYMENT_STATES = %w{pending completed rejected}
 
@@ -18,6 +19,11 @@ module PuntoPagosRails
 
       def paid?
         completed?
+      end
+
+      def payment_method=(value)
+        value = value.to_i
+        @payment_method = value.zero? ? nil : value
       end
     end
 

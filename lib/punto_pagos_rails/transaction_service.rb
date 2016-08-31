@@ -12,7 +12,8 @@ module PuntoPagosRails
 
     def create
       transaction = payable.transactions.create!
-      response = PuntoPagos::Request.new.create(transaction.id.to_s, transaction.amount_to_s, nil)
+      response = PuntoPagos::Request.new.create(
+        transaction.id.to_s, transaction.amount_to_s, payable.payment_method)
 
       if !response.success?
         payable.errors.add(:base, I18n.t("punto_pagos_rails.errors.invalid_puntopagos_response"))
