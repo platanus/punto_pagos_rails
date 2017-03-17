@@ -1,5 +1,11 @@
 ENV["RAILS_ENV"] ||= 'test'
 
+require 'simplecov'
+SimpleCov.start
+
+require 'codecov'
+SimpleCov.formatter = SimpleCov::Formatter::Codecov
+
 require File.expand_path("../dummy/config/environment", __FILE__)
 require 'rspec/rails'
 require 'spec_helper'
