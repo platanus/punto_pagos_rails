@@ -1,8 +1,14 @@
----
 language: ruby
-sudo: false
-script:
-  - cd spec/dummy && RAILS_ENV=test bundle exec rake db:create db:migrate
-  - cd ../.. && bundle exec rspec spec
 rvm:
-  - "2.0.0"
+- 2.3.1
+script:
+- cd spec/dummy && RAILS_ENV=test bundle exec rake db:create db:migrate
+- cd ../.. && bundle exec rspec spec
+deploy:
+  provider: rubygems
+  api_key:
+    secure: b0qJkO0+K56At/iYkFeVOb5yF8S0p0FXXlA0ZgJt+2y2jkerQh8vlShr6ga+C3iEg+xPJ1yLc3Ke0YOrZAWCQyXyVdO4ALNY/Qw8U6gKvx93UOiWU/PhJeXij1e/TQMoxHLm9dBWcGYioAM9gUmsBSz5B90ZHY4rKm4/oJLn7jE=
+  gem: punto_pagos_rails
+  on:
+    tags: true
+    repo: platanus/punto_pagos_rails

@@ -1,4 +1,4 @@
-# PuntoPagosRails [![Gem Version](https://badge.fury.io/rb/punto_pagos_rails.svg)](http://badge.fury.io/rb/punto_pagos_rails) [![Build Status](https://travis-ci.org/platanus/punto_pagos_rails.svg?branch=master)](https://travis-ci.org/platanus/punto_pagos_rails)
+# PuntoPagosRails [![Gem Version](https://badge.fury.io/rb/punto_pagos_rails.svg)](http://badge.fury.io/rb/punto_pagos_rails) [![Build Status](https://travis-ci.org/platanus/punto_pagos_rails.svg?branch=master)](https://travis-ci.org/platanus/punto_pagos_rails) [![Coverage Status](https://coveralls.io/repos/github/platanus/punto_pagos_rails/badge.svg)](https://coveralls.io/github/platanus/punto_pagos_rails)
 
 Esta gema es un engine construído sobre [puntopagos-ruby](https://github.com/acidlabs/puntopagos-ruby) con la intención de integrar a una Rails app el flujo de pago básico o más común que podemos encontrar normalmente en una aplicación.
 
