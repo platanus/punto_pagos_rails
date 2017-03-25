@@ -7,7 +7,7 @@ script:
 deploy:
   provider: rubygems
   api_key:
-    secure: b0qJkO0+K56At/iYkFeVOb5yF8S0p0FXXlA0ZgJt+2y2jkerQh8vlShr6ga+C3iEg+xPJ1yLc3Ke0YOrZAWCQyXyVdO4ALNY/Qw8U6gKvx93UOiWU/PhJeXij1e/TQMoxHLm9dBWcGYioAM9gUmsBSz5B90ZHY4rKm4/oJLn7jE=
+    secure: SRuCVEbWNuis3IvA6TSRPRuONr8cjfV5YXKd6p0XTcW5WohCDdHeShhR2cmMq/sELB/bqgo5z6qsYuu24zryjFY4RHwmMXN2ucOEiHYZ6+PgHMT/DMP08Qw2aEsk91D0h2T8rY3VXmB3637PnX7Mgk+H4s2bn6X2WzU4lhhcSuE=
   gem: punto_pagos_rails
   on:
     tags: true
