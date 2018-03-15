@@ -17,9 +17,9 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["spec/**/*"]
 
-  s.add_dependency "rails", "~> 4.2", ">= 4.2.0"
-  s.add_dependency "aasm", "~> 4.0", ">= 4.0.4"
-  s.add_dependency "enumerize", "~> 1.1", ">= 1.1.1"
+  s.add_dependency "rails", ">= 4.2.0"
+  s.add_dependency "aasm", ">= 4.0.4"
+  s.add_dependency "enumerize", ">= 1.1.1"
 
   s.add_development_dependency "rspec-rails", "~> 3.4.0"
   s.add_development_dependency "pry-rails", "0.3.2"
