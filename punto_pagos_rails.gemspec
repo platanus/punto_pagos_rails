@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "rspec-rails", "~> 3.4.0"
   s.add_development_dependency "pry-rails", "0.3.2"
-  s.add_development_dependency "factory_girl_rails", "~> 4.6.0"
+  s.add_development_dependency "factory_bot_rails"
   s.add_development_dependency "shoulda-matchers", "2.6.1"
   s.add_development_dependency "guard", "~> 2.7.0"
   s.add_development_dependency "guard-rspec", "~> 4.3"
