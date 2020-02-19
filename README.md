@@ -1,5 +1,12 @@
 # PuntoPagosRails [![Gem Version](https://badge.fury.io/rb/punto_pagos_rails.svg)](http://badge.fury.io/rb/punto_pagos_rails) [![Build Status](https://travis-ci.org/platanus/punto_pagos_rails.svg?branch=master)](https://travis-ci.org/platanus/punto_pagos_rails) [![Coverage Status](https://coveralls.io/repos/github/platanus/punto_pagos_rails/badge.svg)](https://coveralls.io/github/platanus/punto_pagos_rails)
 
+## PuntoPagosRails is no longer maintained.
+
+- We will leave the Issues open as a discussion forum only.
+- We do not guarantee a response from us in the Issues.
+- We are no longer accepting pull requests.
+- We are using this https://github.com/platanus/active_merchant/tree/punto_pagos_gateway
+
 Esta gema es un engine construído sobre [puntopagos-ruby](https://github.com/acidlabs/puntopagos-ruby) con la intención de integrar a una Rails app el flujo de pago básico o más común que podemos encontrar normalmente en una aplicación.
 
 ## Instalación
