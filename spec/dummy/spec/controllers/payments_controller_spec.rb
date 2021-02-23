@@ -10,7 +10,7 @@ describe PaymentsController do
     end
 
     it "renders json response" do
-      get :notification, token: transaction.token
+      get :notification, params: { token: transaction.token }
       expect(response.status).to eq(200)
     end
   end
