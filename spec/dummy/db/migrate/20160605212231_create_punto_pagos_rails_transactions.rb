@@ -1,4 +1,4 @@
-class CreatePuntoPagosRailsTransactions < ActiveRecord::Migration
+class CreatePuntoPagosRailsTransactions < ActiveRecord::Migration[4.2]
   def change
     create_table :punto_pagos_rails_transactions do |t|
       t.references :payable, polymorphic: true
