@@ -12,7 +12,7 @@ describe TransactionsController do
           receive(:process_url).and_return(fake_proccess_url))
       end
 
-      subject { post :create, ticket: { amount: 5000 } }
+      subject { post :create, params: { ticket: { amount: 5000 } } }
 
       it "redirects to process url" do
         expect(subject).to redirect_to(fake_proccess_url)
@@ -27,14 +27,14 @@ describe TransactionsController do
           receive(:create).and_return(false))
       end
 
-      subject { post :create, ticket: { amount: 5000 } }
+      subject { post :create, params: { ticket: { amount: 5000 } } }
 
       it "renders error template" do
         expect(subject).to render_template(:error)
       end
 
       it "shows error in view" do
-        post :create, ticket: { amount: 5000 }
+        post :create, params: { ticket: { amount: 5000 } }
         expect(response.body).to match /Error view/
       end
     end
@@ -54,14 +54,14 @@ describe TransactionsController do
 
   describe "#success" do
     let!(:transaction) { create(:transaction) }
-    subject { get :success, token: transaction.token }
+    subject { get :success, params: { token: transaction.token } }
 
     it "renders success template" do
       expect(subject).to render_template(:success)
     end
 
     it "shows success view" do
-      get :success, token: transaction.token
+      get :success, params: { token: transaction.token }
       expect(response.body).to match /Ticket/
       expect(response.body).to match /Success view/
     end
@@ -69,14 +69,14 @@ describe TransactionsController do
 
   describe "#error" do
     let!(:transaction) { create(:transaction) }
-    subject { get :error, token: transaction.token }
+    subject { get :error, params: { token: transaction.token } }
 
     it "renders error template" do
       expect(subject).to render_template(:error)
     end
 
     it "shows error view" do
-      get :error, token: transaction.token
+      get :error, params: { token: transaction.token }
       expect(response.body).to match /Error view/
     end
   end

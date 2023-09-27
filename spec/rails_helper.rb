@@ -1,5 +1,6 @@
 require 'simplecov'
 require 'coveralls'
+require 'rails-controller-testing'
 
 formatters = [SimpleCov::Formatter::HTMLFormatter, Coveralls::SimpleCov::Formatter]
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter::new(formatters)
@@ -39,3 +40,5 @@ RSpec.configure do |config|
 
   FactoryBot::SyntaxRunner.send(:include, RSpec::Mocks::ExampleMethods)
 end
+
+Rails::Controller::Testing.install

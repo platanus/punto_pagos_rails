@@ -1,6 +1,6 @@
 language: ruby
 rvm:
-- 2.3.1
+- 2.6.6
 script:
 - cd spec/dummy && RAILS_ENV=test bundle exec rake db:create db:migrate
 - cd ../.. && bundle exec rspec spec
